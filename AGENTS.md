@@ -82,6 +82,7 @@ Backend stack:
 - Spring Boot Actuator
 - Docker Compose
 - Lombok
+- Springdoc OpenAPI (Swagger)
 
 Testing stack:
 
@@ -406,6 +407,8 @@ secrets/
 
 # API Rules
 
+API documentation is automatically generated using Swagger (Springdoc OpenAPI). Review the UI to understand existing contracts.
+
 This backend serves the frontend repository:
 
 ```text
@@ -603,3 +606,13 @@ premature abstraction
 ```
 
 The codebase should stay maintainable for long-term development.
+---
+
+# Product Roadmap
+
+The backend feature roadmap and detailed specifications are located in the `tasks/` directory:
+
+- Roadmap: `tasks/backend-feature-roadmap.md`
+- Feature Specs: `tasks/feature/*.md`
+
+Agents should refer to these documents to understand the current goal and implementation details of each feature.

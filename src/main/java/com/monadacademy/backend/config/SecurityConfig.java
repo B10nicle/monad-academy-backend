@@ -34,7 +34,10 @@ public class SecurityConfig {
 								"/api/auth/verify-email",
 								"/api/auth/resend-verification",
 								"/actuator/health",
-								"/actuator/info").permitAll()
+								"/actuator/info",
+								"/v3/api-docs/**",
+								"/swagger-ui/**",
+								"/swagger-ui.html").permitAll()
 						.anyRequest().authenticated())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
