@@ -14,8 +14,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/**
+ * Persists security-relevant user activity events.
+ *
+ * @author Monad Academy Agent
+ */
+@Getter
 @Entity
 @Table(name = "audit_logs")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuditLog {
 
 	@Id
@@ -35,9 +46,6 @@ public class AuditLog {
 	@Column(nullable = false)
 	private Instant createdAt;
 
-	protected AuditLog() {
-	}
-
 	public AuditLog(User user, AuditEventType eventType, String metadata) {
 		this.id = UUID.randomUUID();
 		this.user = user;
@@ -48,25 +56,5 @@ public class AuditLog {
 	@PrePersist
 	void prePersist() {
 		this.createdAt = Instant.now();
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public AuditEventType getEventType() {
-		return eventType;
-	}
-
-	public String getMetadata() {
-		return metadata;
-	}
-
-	public Instant getCreatedAt() {
-		return createdAt;
 	}
 }

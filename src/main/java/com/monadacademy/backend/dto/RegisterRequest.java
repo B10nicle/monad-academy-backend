@@ -4,6 +4,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Represents a user registration request.
+ *
+ * @author Monad Academy Agent
+ */
 public record RegisterRequest(
 		@Email
 		@NotBlank

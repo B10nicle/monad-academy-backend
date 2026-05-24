@@ -1,4 +1,4 @@
-package com.monadacademy.backend.service;
+package com.monadacademy.backend.service.auth;
 
 import java.util.Locale;
 
@@ -21,8 +21,19 @@ import com.monadacademy.backend.exception.AppException;
 import com.monadacademy.backend.exception.ErrorCode;
 import com.monadacademy.backend.repository.UserRepository;
 import com.monadacademy.backend.security.JwtTokenService;
+import com.monadacademy.backend.service.audit.AuditLogService;
+import com.monadacademy.backend.service.email.EmailSender;
+import com.monadacademy.backend.service.email.EmailVerificationTokenService;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Orchestrates registration, verification, resend, and login flows.
+ *
+ * @author Monad Academy Agent
+ */
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
 	private static final String VERIFICATION_SENT_MESSAGE = "If the email exists, verification instructions have been sent";
@@ -36,23 +47,6 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 	private final EmailVerificationTokenService tokenService;
-
-	public AuthService(
-			EmailSender emailSender,
-			AppProperties appProperties,
-			AuditLogService auditLogService,
-			JwtTokenService jwtTokenService,
-			PasswordEncoder passwordEncoder,
-			UserRepository userRepository,
-			EmailVerificationTokenService tokenService) {
-		this.emailSender = emailSender;
-		this.appProperties = appProperties;
-		this.auditLogService = auditLogService;
-		this.jwtTokenService = jwtTokenService;
-		this.passwordEncoder = passwordEncoder;
-		this.userRepository = userRepository;
-		this.tokenService = tokenService;
-	}
 
 	@Transactional
 	public MessageResponse register(RegisterRequest request) {

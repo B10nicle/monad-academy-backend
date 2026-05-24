@@ -13,17 +13,21 @@ import com.monadacademy.backend.dto.MessageResponse;
 import com.monadacademy.backend.dto.RegisterRequest;
 import com.monadacademy.backend.dto.ResendVerificationRequest;
 import com.monadacademy.backend.dto.VerifyEmailRequest;
-import com.monadacademy.backend.service.AuthService;
+import com.monadacademy.backend.service.auth.AuthService;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Exposes authentication endpoints for registration, verification, resend, and login.
+ *
+ * @author Monad Academy Agent
+ */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
 
 	private final AuthService authService;
-
-	public AuthController(AuthService authService) {
-		this.authService = authService;
-	}
 
 	@PostMapping("/register")
 	MessageResponse register(@Valid @RequestBody RegisterRequest request) {

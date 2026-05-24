@@ -12,8 +12,19 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/**
+ * Persists user identity, role, status, and authentication metadata.
+ *
+ * @author Monad Academy Agent
+ */
+@Getter
 @Entity
 @Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
 	@Id
@@ -46,9 +57,6 @@ public class User {
 	@Column(nullable = false)
 	private Instant updatedAt;
 
-	protected User() {
-	}
-
 	public User(String email, String username, String passwordHash) {
 		this.id = UUID.randomUUID();
 		this.email = email;
@@ -77,45 +85,5 @@ public class User {
 
 	public void updateLastLoginAt() {
 		this.lastLoginAt = Instant.now();
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPasswordHash() {
-		return passwordHash;
-	}
-
-	public UserRole getRole() {
-		return role;
-	}
-
-	public UserStatus getStatus() {
-		return status;
-	}
-
-	public Instant getEmailVerifiedAt() {
-		return emailVerifiedAt;
-	}
-
-	public Instant getLastLoginAt() {
-		return lastLoginAt;
-	}
-
-	public Instant getCreatedAt() {
-		return createdAt;
-	}
-
-	public Instant getUpdatedAt() {
-		return updatedAt;
 	}
 }

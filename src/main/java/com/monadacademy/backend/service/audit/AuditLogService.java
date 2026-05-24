@@ -1,4 +1,4 @@
-package com.monadacademy.backend.service;
+package com.monadacademy.backend.service.audit;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -9,14 +9,18 @@ import com.monadacademy.backend.entity.AuditLog;
 import com.monadacademy.backend.entity.User;
 import com.monadacademy.backend.repository.AuditLogRepository;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Writes audit log events inside active transactions.
+ *
+ * @author Monad Academy Agent
+ */
 @Service
+@RequiredArgsConstructor
 public class AuditLogService {
 
 	private final AuditLogRepository auditLogRepository;
-
-	public AuditLogService(AuditLogRepository auditLogRepository) {
-		this.auditLogRepository = auditLogRepository;
-	}
 
 	@Transactional(propagation = Propagation.MANDATORY)
 	public void log(User user, AuditEventType eventType, String metadata) {

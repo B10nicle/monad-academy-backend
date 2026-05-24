@@ -1,4 +1,4 @@
-package com.monadacademy.backend.service;
+package com.monadacademy.backend.service.email;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -18,23 +18,23 @@ import com.monadacademy.backend.entity.User;
 import com.monadacademy.backend.exception.AppException;
 import com.monadacademy.backend.exception.ErrorCode;
 import com.monadacademy.backend.repository.EmailVerificationTokenRepository;
+import com.monadacademy.backend.service.audit.AuditLogService;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Generates, hashes, stores, and validates email verification tokens.
+ *
+ * @author Monad Academy Agent
+ */
 @Service
+@RequiredArgsConstructor
 public class EmailVerificationTokenService {
 
 	private final SecureRandom secureRandom = new SecureRandom();
 	private final AppProperties appProperties;
 	private final AuditLogService auditLogService;
 	private final EmailVerificationTokenRepository tokenRepository;
-
-	public EmailVerificationTokenService(
-			AppProperties appProperties,
-			AuditLogService auditLogService,
-			EmailVerificationTokenRepository tokenRepository) {
-		this.appProperties = appProperties;
-		this.auditLogService = auditLogService;
-		this.tokenRepository = tokenRepository;
-	}
 
 	@Transactional
 	public String createToken(User user) {

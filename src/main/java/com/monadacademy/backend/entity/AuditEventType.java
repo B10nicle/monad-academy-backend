@@ -1,5 +1,10 @@
 package com.monadacademy.backend.entity;
 
+/**
+ * Defines supported audit log event types.
+ *
+ * @author Monad Academy Agent
+ */
 public enum AuditEventType {
 	USER_REGISTERED,
 	USER_EMAIL_VERIFIED,

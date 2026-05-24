@@ -5,17 +5,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.monadacademy.backend.dto.UserResponse;
-import com.monadacademy.backend.service.UserService;
+import com.monadacademy.backend.service.user.UserService;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Exposes user endpoints for authenticated account data.
+ *
+ * @author Monad Academy Agent
+ */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
 
 	private final UserService userService;
-
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
 
 	@GetMapping("/me")
 	UserResponse me() {

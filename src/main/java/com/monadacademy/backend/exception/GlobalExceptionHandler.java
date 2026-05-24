@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.monadacademy.backend.dto.ErrorResponse;
 
+/**
+ * Maps application and validation exceptions to API error responses.
+ *
+ * @author Monad Academy Agent
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

@@ -81,6 +81,7 @@ Backend stack:
 - Liquibase
 - Spring Boot Actuator
 - Docker Compose
+- Lombok
 
 Testing stack:
 
@@ -103,6 +104,7 @@ Important decisions:
 - Raw email verification tokens are sent only through `EmailSender`.
 - The default email sender is `LoggingEmailSender` for local development.
 - JSON support uses Spring Boot Jackson 3 packages under `tools.jackson`.
+- Lombok is used for constructors, getters, and JPA no-args constructors where it removes boilerplate.
 
 ---
 
@@ -233,6 +235,18 @@ Do not introduce new architectural layers unless justified.
 
 Avoid overengineering.
 
+Service implementations must be grouped by domain-oriented subpackages when the package grows.
+
+Current service package structure:
+
+```text
+service
+├── audit
+├── auth
+├── email
+└── user
+```
+
 ---
 
 # Coding Style
@@ -249,6 +263,14 @@ Prefer:
 Allowed:
 
 - Lombok where useful
+
+Required:
+
+- use Lombok for constructor injection boilerplate
+- use Lombok for simple getters in entities
+- use Lombok for protected JPA no-args constructors
+- add class-level Javadoc to every Java type
+- include `@author Monad Academy Agent` in class-level Javadoc for agent-created Java types
 
 Avoid:
 
@@ -302,6 +324,22 @@ Apply this rule consistently for:
 - configuration classes
 
 Do not reorder annotations unless the resulting order follows the length rule.
+
+## Java Type Documentation
+
+Every Java type must have class-level Javadoc before annotations or declarations.
+
+Required format:
+
+```java
+/**
+ * Briefly describes what the type does.
+ *
+ * @author Monad Academy Agent
+ */
+```
+
+Keep descriptions short and factual.
 
 ---
 

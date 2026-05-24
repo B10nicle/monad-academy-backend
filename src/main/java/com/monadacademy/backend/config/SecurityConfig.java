@@ -12,6 +12,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.monadacademy.backend.security.JwtAuthenticationFilter;
 
+/**
+ * Configures stateless API security and public endpoint access.
+ *
+ * @author Monad Academy Agent
+ */
 @Configuration
 public class SecurityConfig {
 

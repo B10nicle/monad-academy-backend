@@ -18,7 +18,15 @@ import com.monadacademy.backend.entity.UserRole;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Creates and validates HMAC-signed JWT tokens.
+ *
+ * @author Monad Academy Agent
+ */
 @Service
+@RequiredArgsConstructor
 public class JwtTokenService {
 
 	private static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
@@ -27,11 +35,6 @@ public class JwtTokenService {
 
 	private final ObjectMapper objectMapper;
 	private final AppProperties appProperties;
-
-	public JwtTokenService(ObjectMapper objectMapper, AppProperties appProperties) {
-		this.objectMapper = objectMapper;
-		this.appProperties = appProperties;
-	}
 
 	public String createToken(User user) {
 		var now = Instant.now();

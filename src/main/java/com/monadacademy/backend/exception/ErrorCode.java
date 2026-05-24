@@ -1,5 +1,13 @@
 package com.monadacademy.backend.exception;
 
+import lombok.Getter;
+
+/**
+ * Defines stable API error codes and default messages.
+ *
+ * @author Monad Academy Agent
+ */
+@Getter
 public enum ErrorCode {
 	VALIDATION_ERROR("Validation error"),
 	EMAIL_ALREADY_EXISTS("Email is already registered"),
@@ -14,9 +22,5 @@ public enum ErrorCode {
 
 	ErrorCode(String message) {
 		this.message = message;
-	}
-
-	public String getMessage() {
-		return message;
 	}
 }

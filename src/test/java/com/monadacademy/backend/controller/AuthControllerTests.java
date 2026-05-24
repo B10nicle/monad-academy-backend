@@ -28,11 +28,16 @@ import com.monadacademy.backend.entity.User;
 import com.monadacademy.backend.repository.AuditLogRepository;
 import com.monadacademy.backend.repository.EmailVerificationTokenRepository;
 import com.monadacademy.backend.repository.UserRepository;
-import com.monadacademy.backend.service.EmailVerificationTokenService;
+import com.monadacademy.backend.service.email.EmailVerificationTokenService;
 
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
+/**
+ * Verifies authentication API flows with PostgreSQL Testcontainers.
+ *
+ * @author Monad Academy Agent
+ */
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc

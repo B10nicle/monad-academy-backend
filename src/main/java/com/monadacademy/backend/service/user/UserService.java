@@ -1,4 +1,4 @@
-package com.monadacademy.backend.service;
+package com.monadacademy.backend.service.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -10,16 +10,19 @@ import com.monadacademy.backend.exception.ErrorCode;
 import com.monadacademy.backend.repository.UserRepository;
 import com.monadacademy.backend.security.CurrentUserProvider;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Loads data for the currently authenticated user.
+ *
+ * @author Monad Academy Agent
+ */
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
 	private final UserRepository userRepository;
 	private final CurrentUserProvider currentUserProvider;
-
-	public UserService(UserRepository userRepository, CurrentUserProvider currentUserProvider) {
-		this.userRepository = userRepository;
-		this.currentUserProvider = currentUserProvider;
-	}
 
 	@Transactional(readOnly = true)
 	public UserResponse getCurrentUser() {

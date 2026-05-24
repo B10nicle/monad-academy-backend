@@ -13,14 +13,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Authenticates requests that contain a valid bearer JWT.
+ *
+ * @author Monad Academy Agent
+ */
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtTokenService jwtTokenService;
-
-	public JwtAuthenticationFilter(JwtTokenService jwtTokenService) {
-		this.jwtTokenService = jwtTokenService;
-	}
 
 	@Override
 	protected void doFilterInternal(

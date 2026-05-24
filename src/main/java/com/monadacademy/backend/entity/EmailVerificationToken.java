@@ -12,8 +12,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/**
+ * Persists hashed email verification tokens and their lifecycle timestamps.
+ *
+ * @author Monad Academy Agent
+ */
+@Getter
 @Entity
 @Table(name = "email_verification_tokens")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmailVerificationToken {
 
 	@Id
@@ -33,9 +44,6 @@ public class EmailVerificationToken {
 
 	@Column(nullable = false)
 	private Instant createdAt;
-
-	protected EmailVerificationToken() {
-	}
 
 	public EmailVerificationToken(User user, String tokenHash, Instant expiresAt) {
 		this.id = UUID.randomUUID();
@@ -59,29 +67,5 @@ public class EmailVerificationToken {
 
 	public boolean isExpired() {
 		return expiresAt.isBefore(Instant.now());
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public String getTokenHash() {
-		return tokenHash;
-	}
-
-	public Instant getExpiresAt() {
-		return expiresAt;
-	}
-
-	public Instant getConfirmedAt() {
-		return confirmedAt;
-	}
-
-	public Instant getCreatedAt() {
-		return createdAt;
 	}
 }

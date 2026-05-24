@@ -9,6 +9,11 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+/**
+ * Verifies that the Spring application context starts with PostgreSQL Testcontainers.
+ *
+ * @author Monad Academy Agent
+ */
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
