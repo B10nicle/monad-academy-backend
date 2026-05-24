@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="2026-05-24-003-create-audit-logs" author="monad-academy-agent">
+		<createTable tableName="audit_logs">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="user_id" type="uuid"/>
+			<column name="event_type" type="varchar(64)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="metadata" type="text"/>
+			<column name="created_at" type="timestamp with time zone">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+				baseTableName="audit_logs"
+				baseColumnNames="user_id"
+				constraintName="fk_audit_logs_user"
+				referencedTableName="users"
+				referencedColumnNames="id"
+				onDelete="SET NULL"/>
+
+		<createIndex tableName="audit_logs" indexName="idx_audit_logs_user_id">
+			<column name="user_id"/>
+		</createIndex>
+
+		<createIndex tableName="audit_logs" indexName="idx_audit_logs_event_type">
+			<column name="event_type"/>
+		</createIndex>
+	</changeSet>
+</databaseChangeLog>

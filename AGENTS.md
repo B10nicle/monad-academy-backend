@@ -352,13 +352,15 @@ Schema changes MUST use Liquibase.
 Master changelog:
 
 ```text
-src/main/resources/db/changelog/db.changelog-master.yaml
+src/main/resources/db/changelog/db.changelog-master.xml
 ```
 
 Rules:
 
 - never silently edit existing migrations
 - create new changesets
+- keep changesets in separate XML files under `src/main/resources/db/changelog/changes`
+- include new changeset files from the master changelog
 - keep JPA entities synchronized with migrations
 - prefer PostgreSQL-compatible behavior
 - avoid H2-specific assumptions
