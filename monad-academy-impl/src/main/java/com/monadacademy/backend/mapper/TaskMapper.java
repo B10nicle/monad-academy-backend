@@ -2,7 +2,8 @@ package com.monadacademy.backend.mapper;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.monadacademy.backend.dto.TaskResponse;
 import com.monadacademy.backend.dto.TaskTestCaseResponse;
@@ -14,35 +15,12 @@ import com.monadacademy.backend.entity.TaskTestCase;
  *
  * @author Monad Academy Agent
  */
-@Component
-public class TaskMapper {
+@Mapper(componentModel = "spring")
+public interface TaskMapper {
 
-	public TaskResponse toResponse(Task task, List<TaskTestCase> testCases) {
-		return new TaskResponse(
-				task.getId(),
-				task.getTitle(),
-				task.getSlug(),
-				task.getDescription(),
-				task.getDifficulty(),
-				task.getTopic(),
-				task.getStatus(),
-				task.getInitialCode(),
-				task.getSolutionTemplate(),
-				task.getCreatedAt(),
-				task.getUpdatedAt(),
-				testCases.stream()
-						.map(this::toResponse)
-						.toList());
-	}
+	@Mapping(target = "testCases", source = "testCases")
+	TaskResponse toResponse(Task task, List<TaskTestCase> testCases);
 
-	public TaskTestCaseResponse toResponse(TaskTestCase testCase) {
-		return new TaskTestCaseResponse(
-				testCase.getId(),
-				testCase.getTask().getId(),
-				testCase.getInput(),
-				testCase.getExpectedOutput(),
-				testCase.isHidden(),
-				testCase.getOrderIndex(),
-				testCase.getCreatedAt());
-	}
+	@Mapping(target = "taskId", source = "task.id")
+	TaskTestCaseResponse toResponse(TaskTestCase testCase);
 }
