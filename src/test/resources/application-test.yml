@@ -7,3 +7,10 @@ spring:
       ddl-auto: validate
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+app:
+  frontend-base-url: http://localhost:3000
+  email-verification-token-ttl: 24h
+  jwt:
+    secret: test-secret-test-secret-test-secret-test-secret
+    expiration: 1h

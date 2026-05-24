@@ -21,3 +21,10 @@ management:
     health:
       probes:
         enabled: true
+
+app:
+  frontend-base-url: http://localhost:3000
+  email-verification-token-ttl: 24h
+  jwt:
+    secret: ${APP_JWT_SECRET:change-this-secret-before-production-change-this-secret}
+    expiration: 1h

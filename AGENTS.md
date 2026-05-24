@@ -90,6 +90,22 @@ Testing stack:
 
 ---
 
+# Current Backend State
+
+Authentication foundation is implemented in `feature/auth`.
+
+Important decisions:
+
+- JWT tokens are signed with HMAC-SHA256 using JDK crypto APIs.
+- No dedicated JWT dependency is used unless future requirements justify it.
+- JWT configuration lives under `app.jwt`.
+- Email verification stores only SHA-256 token hashes.
+- Raw email verification tokens are sent only through `EmailSender`.
+- The default email sender is `LoggingEmailSender` for local development.
+- JSON support uses Spring Boot Jackson 3 packages under `tools.jackson`.
+
+---
+
 # Repository Rules
 
 Permanent branches:
