@@ -607,6 +607,7 @@ Before finishing:
 3. Check Liquibase consistency
 4. Ensure API compatibility
 5. Verify no secrets are committed
+6. Update `tasks/backend-feature-roadmap.md` to mark completed feature work and add implementation notes
 
 ---
 
@@ -659,3 +660,9 @@ The backend feature roadmap and detailed specifications are located in the `task
 - Feature Specs: `tasks/feature/*.md`
 
 Agents should refer to these documents to understand the current goal and implementation details of each feature.
+
+When a feature is completed, agents must update `tasks/backend-feature-roadmap.md` in the same PR:
+
+- set the feature status to completed
+- update the progress overview row
+- add concise notes about the PR, important technical decisions, migrations, and security-relevant behavior

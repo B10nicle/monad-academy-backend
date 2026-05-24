@@ -52,7 +52,8 @@ Delivered:
 Notes:
 
 - implemented in PR #5
-- accepted architectural decision: keep current JWT implementation for now
+- JWT issuing and validation are implemented through Spring Security OAuth2 Resource Server
+- backend was split into Maven modules: api, db, domain, and impl
 
 ---
 
