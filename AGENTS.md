@@ -98,8 +98,8 @@ Authentication foundation is implemented in `feature/auth`.
 
 Important decisions:
 
-- JWT tokens are signed with HMAC-SHA256 using JDK crypto APIs.
-- No dedicated JWT dependency is used unless future requirements justify it.
+- JWT tokens are issued and validated through Spring Security OAuth2 Resource Server.
+- JWT signing uses Spring Security/Nimbus infrastructure with HMAC-SHA256.
 - JWT configuration lives under `app.jwt`.
 - Email verification stores only SHA-256 token hashes.
 - Raw email verification tokens are sent only through `EmailSender`.
@@ -214,7 +214,32 @@ Prefer Spring Data JPA patterns.
 
 ---
 
-# Package Structure
+# Module Structure
+
+The backend is a Maven multi-module project.
+
+Current module structure:
+
+```text
+monad-academy-backend
+├── monad-academy-api
+├── monad-academy-db
+├── monad-academy-domain
+└── monad-academy-impl
+```
+
+Module responsibilities:
+
+- `monad-academy-api`: DTOs and API-facing contracts
+- `monad-academy-db`: Liquibase master changelog and migration scripts
+- `monad-academy-domain`: domain model and JPA entities
+- `monad-academy-impl`: Spring Boot application, controllers, services, repositories, security, configuration, and tests
+
+Do not put frontend concerns or UI resources into any backend module.
+
+Do not add `static` or `templates` resource directories unless the backend explicitly starts rendering server-side HTML.
+
+## Package Structure
 
 Preferred structure:
 
@@ -353,15 +378,19 @@ Schema changes MUST use Liquibase.
 Master changelog:
 
 ```text
-src/main/resources/db/changelog/db.changelog-master.xml
+monad-academy-db/src/main/resources/db/changelog/db.changelog-master.xml
 ```
 
 Rules:
 
 - never silently edit existing migrations
 - create new changesets
-- keep changesets in separate XML files under `src/main/resources/db/changelog/changes`
+- keep changesets in separate XML files under `monad-academy-db/src/main/resources/db/changelog/changes`
 - include new changeset files from the master changelog
+- name changeset files with a zero-padded numeric prefix, for example `01-create-users.xml`
+- create and use the application schema `monad_academy`
+- do not create application tables in PostgreSQL `public`
+- specify `schemaName="monad_academy"` for schema objects in Liquibase changes
 - keep JPA entities synchronized with migrations
 - prefer PostgreSQL-compatible behavior
 - avoid H2-specific assumptions
@@ -383,6 +412,7 @@ Be conservative.
 Do:
 
 - keep SecurityConfig focused
+- use Spring Security OAuth2 Resource Server for bearer JWT validation
 - protect endpoints intentionally
 - validate authentication flows
 - respect least privilege
@@ -390,6 +420,7 @@ Do:
 Do NOT:
 
 - disable security to make tests pass
+- add custom JWT servlet filters while Resource Server can handle bearer tokens
 - hardcode secrets
 - expose actuator broadly
 - weaken authentication casually

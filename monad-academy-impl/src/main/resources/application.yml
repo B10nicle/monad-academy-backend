@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: monad-academy-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/monad_academy
+    username: monad_academy
+    password: monad_academy
+    hikari:
+      connection-init-sql: CREATE SCHEMA IF NOT EXISTS monad_academy
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: monad_academy
+    open-in-view: false
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    default-schema: monad_academy
+    liquibase-schema: monad_academy
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+app:
+  frontend-base-url: http://localhost:3000
+  email-verification-token-ttl: 24h
+  jwt:
+    secret: ${APP_JWT_SECRET:change-this-secret-before-production-change-this-secret}
+    expiration: 1h
