@@ -94,4 +94,38 @@ public class Task {
 	void preUpdate() {
 		this.updatedAt = Instant.now();
 	}
+
+	public void update(
+			String title,
+			String slug,
+			String description,
+			TaskDifficulty difficulty,
+			TaskTopic topic,
+			TaskStatus status,
+			String initialCode,
+			String solutionTemplate) {
+		this.title = title;
+		this.slug = slug;
+		this.description = description;
+		this.difficulty = difficulty;
+		this.topic = topic;
+		this.status = status;
+		this.initialCode = initialCode;
+		this.solutionTemplate = solutionTemplate;
+		touch();
+	}
+
+	public void publish() {
+		this.status = TaskStatus.PUBLISHED;
+		touch();
+	}
+
+	public void archive() {
+		this.status = TaskStatus.ARCHIVED;
+		touch();
+	}
+
+	private void touch() {
+		this.updatedAt = Instant.now();
+	}
 }

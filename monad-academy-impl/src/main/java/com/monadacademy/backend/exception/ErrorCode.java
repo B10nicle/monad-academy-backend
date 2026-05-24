@@ -16,7 +16,9 @@ public enum ErrorCode {
 	EMAIL_NOT_VERIFIED("Email is not verified"),
 	USER_BLOCKED("User is blocked"),
 	INVALID_VERIFICATION_TOKEN("Invalid verification token"),
-	EXPIRED_VERIFICATION_TOKEN("Expired verification token");
+	EXPIRED_VERIFICATION_TOKEN("Expired verification token"),
+	TASK_NOT_FOUND("Task not found"),
+	TASK_SLUG_ALREADY_EXISTS("Task slug is already used");
 
 	private final String message;
 
