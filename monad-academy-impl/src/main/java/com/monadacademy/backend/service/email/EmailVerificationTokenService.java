@@ -21,12 +21,14 @@ import com.monadacademy.backend.repository.EmailVerificationTokenRepository;
 import com.monadacademy.backend.service.audit.AuditLogService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Generates, hashes, stores, and validates email verification tokens.
  *
  * @author Monad Academy Agent
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailVerificationTokenService {
@@ -42,6 +44,7 @@ public class EmailVerificationTokenService {
 		var expiresAt = Instant.now().plus(appProperties.emailVerificationTokenTtl());
 		var token = new EmailVerificationToken(user, hash(rawToken), expiresAt);
 		tokenRepository.save(token);
+		log.info("Created email verification token for userId={}", user.getId());
 		return rawToken;
 	}
 
@@ -62,6 +65,7 @@ public class EmailVerificationTokenService {
 		user.activate();
 		token.confirm();
 		auditLogService.log(user, AuditEventType.USER_EMAIL_VERIFIED, null);
+		log.info("Verified email for userId={}", user.getId());
 		return user;
 	}
 

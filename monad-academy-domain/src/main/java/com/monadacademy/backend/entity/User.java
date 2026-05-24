@@ -58,11 +58,15 @@ public class User {
 	private Instant updatedAt;
 
 	public User(String email, String username, String passwordHash) {
+		this(email, username, passwordHash, UserRole.USER);
+	}
+
+	public User(String email, String username, String passwordHash, UserRole role) {
 		this.id = UUID.randomUUID();
 		this.email = email;
 		this.username = username;
 		this.passwordHash = passwordHash;
-		this.role = UserRole.USER;
+		this.role = role;
 		this.status = UserStatus.PENDING_EMAIL_VERIFICATION;
 	}
 

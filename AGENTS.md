@@ -106,6 +106,8 @@ Important decisions:
 - The default email sender is `LoggingEmailSender` for local development.
 - JSON support uses Spring Boot Jackson 3 packages under `tools.jackson`.
 - Lombok is used for constructors, getters, and JPA no-args constructors where it removes boilerplate.
+- MapStruct is used for DTO mapping; mapper implementations should be generated, not handwritten.
+- MapStruct Spring component model is configured through Maven compiler args.
 
 ---
 
@@ -302,6 +304,8 @@ Required:
 - use Lombok for constructor injection boilerplate
 - use Lombok for simple getters in entities
 - use Lombok for protected JPA no-args constructors
+- use Lombok `@Slf4j` for class logging
+- use MapStruct for DTO/entity mapping
 - add class-level Javadoc to every Java type
 - include `@author Monad Academy Agent` in class-level Javadoc for agent-created Java types
 

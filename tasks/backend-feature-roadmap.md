@@ -16,7 +16,7 @@ Legend:
 |---|---:|---|
 | feature/auth | [x] | Implemented in PR #5 |
 | feature/tasks-domain | [x] | Implemented in feature/tasks-domain |
-| feature/admin-tasks-api | [ ] | Not started |
+| feature/admin-tasks-api | [x] | Implemented in feature/admin-tasks-api |
 | feature/public-tasks-api | [ ] | Not started |
 | feature/submissions-domain | [ ] | Not started |
 | feature/java-code-runner | [ ] | Not started |
@@ -103,7 +103,7 @@ Dependencies:
 
 ## 3. feature/admin-tasks-api
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -116,6 +116,16 @@ Scope:
 - publish task
 - archive task
 - manage test cases
+
+Delivered:
+
+- admin-only task management endpoints
+- task create and update flows
+- publish and archive lifecycle endpoints
+- test case creation endpoint
+- task management audit events
+- JWT role-to-authority mapping for ADMIN access
+- PostgreSQL Testcontainers controller tests
 
 Endpoints:
 
@@ -287,7 +297,7 @@ Dependencies:
 
 1. feature/auth [x]
 2. feature/tasks-domain [x]
-3. feature/admin-tasks-api
+3. feature/admin-tasks-api [x]
 4. feature/public-tasks-api
 5. feature/submissions-domain
 6. feature/java-code-runner
