@@ -9,9 +9,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
-@Testcontainers
 class MonadAcademyBackendApplicationTests {
 
 	@Container
