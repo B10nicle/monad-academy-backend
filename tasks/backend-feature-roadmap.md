@@ -15,7 +15,7 @@ Legend:
 | Feature | Status | Notes |
 |---|---:|---|
 | feature/auth | [x] | Implemented in PR #5 |
-| feature/tasks-domain | [ ] | Not started |
+| feature/tasks-domain | [x] | Implemented in feature/tasks-domain |
 | feature/admin-tasks-api | [ ] | Not started |
 | feature/public-tasks-api | [ ] | Not started |
 | feature/submissions-domain | [ ] | Not started |
@@ -59,7 +59,7 @@ Notes:
 
 ## 2. feature/tasks-domain
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -80,6 +80,20 @@ Expected deliverables:
 - repositories
 - DTOs
 - validations
+
+Delivered:
+
+- `Task` and `TaskTestCase` entities
+- `TaskDifficulty`, `TaskTopic`, and `TaskStatus` enums
+- task request/response DTOs with validation
+- Liquibase migrations for `tasks` and `task_test_cases`
+- task repositories
+- PostgreSQL Testcontainers repository tests
+
+Notes:
+
+- implemented in feature/tasks-domain
+- task schema changes are stored in `04-create-tasks.xml` and `05-create-task-test-cases.xml`
 
 Dependencies:
 
@@ -272,7 +286,7 @@ Dependencies:
 ## Recommended Order
 
 1. feature/auth [x]
-2. feature/tasks-domain
+2. feature/tasks-domain [x]
 3. feature/admin-tasks-api
 4. feature/public-tasks-api
 5. feature/submissions-domain

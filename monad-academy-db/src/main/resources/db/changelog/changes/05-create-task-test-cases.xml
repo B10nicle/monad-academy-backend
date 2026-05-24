@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="05-create-task-test-cases" author="monad-academy-agent">
+		<createTable schemaName="monad_academy" tableName="task_test_cases">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="task_id" type="uuid">
+				<constraints nullable="false"/>
+			</column>
+			<column name="input" type="text">
+				<constraints nullable="false"/>
+			</column>
+			<column name="expected_output" type="text">
+				<constraints nullable="false"/>
+			</column>
+			<column name="hidden" type="boolean">
+				<constraints nullable="false"/>
+			</column>
+			<column name="order_index" type="integer">
+				<constraints nullable="false"/>
+			</column>
+			<column name="created_at" type="timestamp with time zone">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+				baseTableName="task_test_cases"
+				baseTableSchemaName="monad_academy"
+				baseColumnNames="task_id"
+				constraintName="fk_task_test_cases_task"
+				referencedTableName="tasks"
+				referencedTableSchemaName="monad_academy"
+				referencedColumnNames="id"
+				onDelete="CASCADE"/>
+
+		<createIndex schemaName="monad_academy" tableName="task_test_cases" indexName="idx_task_test_cases_task_id">
+			<column name="task_id"/>
+		</createIndex>
+
+		<createIndex schemaName="monad_academy" tableName="task_test_cases" indexName="idx_task_test_cases_task_order">
+			<column name="task_id"/>
+			<column name="order_index"/>
+		</createIndex>
+	</changeSet>
+</databaseChangeLog>
