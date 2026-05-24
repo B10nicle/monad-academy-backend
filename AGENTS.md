@@ -81,6 +81,7 @@ Backend stack:
 - Liquibase
 - Spring Boot Actuator
 - Docker Compose
+- Springdoc OpenAPI (Swagger)
 
 Testing stack:
 
@@ -349,6 +350,8 @@ secrets/
 ---
 
 # API Rules
+
+API documentation is automatically generated using Swagger (Springdoc OpenAPI). Review the UI to understand existing contracts.
 
 This backend serves the frontend repository:
 
