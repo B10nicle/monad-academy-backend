@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: monad-academy-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/monad_academy
+    username: monad_academy
+    password: monad_academy
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
