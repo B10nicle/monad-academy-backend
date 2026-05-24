@@ -550,3 +550,13 @@ premature abstraction
 ```
 
 The codebase should stay maintainable for long-term development.
+---
+
+# Product Roadmap
+
+The backend feature roadmap and detailed specifications are located in the `tasks/` directory:
+
+- Roadmap: `tasks/backend-feature-roadmap.md`
+- Feature Specs: `tasks/feature/*.md`
+
+Agents should refer to these documents to understand the current goal and implementation details of each feature.
