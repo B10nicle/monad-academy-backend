@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="02-create-email-verification-tokens" author="monad-academy-agent">
+		<createTable schemaName="monad_academy" tableName="email_verification_tokens">
+			<column name="id" type="uuid">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="user_id" type="uuid">
+				<constraints nullable="false"/>
+			</column>
+			<column name="token_hash" type="varchar(128)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="expires_at" type="timestamp with time zone">
+				<constraints nullable="false"/>
+			</column>
+			<column name="confirmed_at" type="timestamp with time zone"/>
+			<column name="created_at" type="timestamp with time zone">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+				baseTableName="email_verification_tokens"
+				baseTableSchemaName="monad_academy"
+				baseColumnNames="user_id"
+				constraintName="fk_email_verification_tokens_user"
+				referencedTableName="users"
+				referencedTableSchemaName="monad_academy"
+				referencedColumnNames="id"
+				onDelete="CASCADE"/>
+
+		<createIndex schemaName="monad_academy" tableName="email_verification_tokens" indexName="idx_email_verification_tokens_user_id">
+			<column name="user_id"/>
+		</createIndex>
+	</changeSet>
+</databaseChangeLog>

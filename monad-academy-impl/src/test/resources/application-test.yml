@@ -1,0 +1,24 @@
+spring:
+  docker:
+    compose:
+      enabled: false
+  datasource:
+    hikari:
+      connection-init-sql: CREATE SCHEMA IF NOT EXISTS monad_academy
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: monad_academy
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    default-schema: monad_academy
+    liquibase-schema: monad_academy
+
+app:
+  frontend-base-url: http://localhost:3000
+  email-verification-token-ttl: 24h
+  jwt:
+    secret: test-secret-test-secret-test-secret-test-secret
+    expiration: 1h
