@@ -1,1 +1,34 @@
-# monad-academy-backend
+# Monad Academy Backend
+
+Spring Boot backend for Monad Academy, a lightweight coding practice platform inspired by LeetCode and Codewars.
+
+## Stack
+
+- Java 25
+- Spring Boot 4
+- Spring Web MVC
+- Spring Security
+- Spring Data JPA
+- PostgreSQL
+- Liquibase
+- Maven Wrapper
+
+## Local Development
+
+Start PostgreSQL with Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+Run the application:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Run tests:
+
+```bash
+./mvnw test
+```
