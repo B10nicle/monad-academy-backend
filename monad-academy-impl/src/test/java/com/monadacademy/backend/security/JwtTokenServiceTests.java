@@ -1,5 +1,8 @@
 package com.monadacademy.backend.security;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
@@ -42,8 +45,8 @@ class JwtTokenServiceTests {
 
 		var jwt = jwtDecoder.decode(token);
 
-		org.assertj.core.api.Assertions.assertThat(jwt.getSubject()).isEqualTo(user.getId().toString());
-		org.assertj.core.api.Assertions.assertThat(jwt.getClaimAsString("role")).isEqualTo(user.getRole().name());
+		assertThat(jwt.getSubject()).isEqualTo(user.getId().toString());
+		assertThat(jwt.getClaimAsString("role")).isEqualTo(user.getRole().name());
 	}
 
 	@Test
@@ -52,7 +55,7 @@ class JwtTokenServiceTests {
 		var token = jwtTokenService.createToken(user);
 		var tamperedToken = token.substring(0, token.length() - 2) + "aa";
 
-		org.assertj.core.api.Assertions.assertThatThrownBy(() -> jwtDecoder.decode(tamperedToken))
+		assertThatThrownBy(() -> jwtDecoder.decode(tamperedToken))
 				.isInstanceOf(JwtException.class);
 	}
 

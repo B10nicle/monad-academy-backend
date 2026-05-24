@@ -1,5 +1,7 @@
 package com.monadacademy.backend.service.auth;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -62,11 +64,11 @@ class AuthServiceTests {
 		var request = new RegisterRequest("user@example.com", "b10nicle", "password");
 		when(userRepository.existsByEmailIgnoreCase("user@example.com")).thenReturn(true);
 
-		var exception = org.assertj.core.api.Assertions.catchThrowableOfType(
+		var exception = catchThrowableOfType(
 				() -> authService.register(request),
 				AppException.class);
 
-		org.assertj.core.api.Assertions.assertThat(exception.getCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS);
+		assertThat(exception.getCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS);
 	}
 
 	@Test
@@ -77,11 +79,11 @@ class AuthServiceTests {
 		when(userRepository.findByEmailIgnoreCase("user@example.com")).thenReturn(Optional.of(user));
 		when(passwordEncoder.matches("wrong-password", "password-hash")).thenReturn(false);
 
-		var exception = org.assertj.core.api.Assertions.catchThrowableOfType(
+		var exception = catchThrowableOfType(
 				() -> authService.login(new LoginRequest("user@example.com", "wrong-password")),
 				AppException.class);
 
-		org.assertj.core.api.Assertions.assertThat(exception.getCode()).isEqualTo(ErrorCode.INVALID_CREDENTIALS);
+		assertThat(exception.getCode()).isEqualTo(ErrorCode.INVALID_CREDENTIALS);
 		verify(auditLogService).log(user, AuditEventType.USER_LOGIN_FAILED, null);
 	}
 

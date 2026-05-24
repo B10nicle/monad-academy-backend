@@ -1,5 +1,7 @@
 package com.monadacademy.backend.service.email;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -51,9 +53,9 @@ class EmailVerificationTokenServiceTests {
 
 		verify(tokenRepository).save(captor.capture());
 		var savedToken = captor.getValue();
-		org.assertj.core.api.Assertions.assertThat(savedToken.getTokenHash()).isEqualTo(service.hash(rawToken));
-		org.assertj.core.api.Assertions.assertThat(savedToken.getTokenHash()).isNotEqualTo(rawToken);
-		org.assertj.core.api.Assertions.assertThat(savedToken.getExpiresAt()).isAfter(Instant.now());
+		assertThat(savedToken.getTokenHash()).isEqualTo(service.hash(rawToken));
+		assertThat(savedToken.getTokenHash()).isNotEqualTo(rawToken);
+		assertThat(savedToken.getExpiresAt()).isAfter(Instant.now());
 	}
 
 	@Test
@@ -61,11 +63,11 @@ class EmailVerificationTokenServiceTests {
 		var service = new EmailVerificationTokenService(appProperties, auditLogService, tokenRepository);
 		when(tokenRepository.findByTokenHash(any())).thenReturn(Optional.empty());
 
-		var exception = org.assertj.core.api.Assertions.catchThrowableOfType(
+		var exception = catchThrowableOfType(
 				() -> service.verify("unknown-token"),
 				AppException.class);
 
-		org.assertj.core.api.Assertions.assertThat(exception.getCode()).isEqualTo(ErrorCode.INVALID_VERIFICATION_TOKEN);
+		assertThat(exception.getCode()).isEqualTo(ErrorCode.INVALID_VERIFICATION_TOKEN);
 	}
 
 	@Test
@@ -76,10 +78,10 @@ class EmailVerificationTokenServiceTests {
 		var token = new EmailVerificationToken(user, service.hash(rawToken), Instant.now().minusSeconds(60));
 		when(tokenRepository.findByTokenHash(service.hash(rawToken))).thenReturn(Optional.of(token));
 
-		var exception = org.assertj.core.api.Assertions.catchThrowableOfType(
+		var exception = catchThrowableOfType(
 				() -> service.verify(rawToken),
 				AppException.class);
 
-		org.assertj.core.api.Assertions.assertThat(exception.getCode()).isEqualTo(ErrorCode.EXPIRED_VERIFICATION_TOKEN);
+		assertThat(exception.getCode()).isEqualTo(ErrorCode.EXPIRED_VERIFICATION_TOKEN);
 	}
 }

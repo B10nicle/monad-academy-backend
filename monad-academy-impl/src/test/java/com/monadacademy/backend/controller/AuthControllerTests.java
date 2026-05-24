@@ -1,5 +1,6 @@
 package com.monadacademy.backend.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -100,8 +101,8 @@ class AuthControllerTests {
 				.andExpect(jsonPath("$.message").value("Registration completed. Check your email to verify your account"));
 
 		var user = userRepository.findByEmailIgnoreCase("user@example.com").orElseThrow();
-		org.assertj.core.api.Assertions.assertThat(user.getStatus().name()).isEqualTo("PENDING_EMAIL_VERIFICATION");
-		org.assertj.core.api.Assertions.assertThat(tokenRepository.findAll()).hasSize(1);
+		assertThat(user.getStatus().name()).isEqualTo("PENDING_EMAIL_VERIFICATION");
+		assertThat(tokenRepository.findAll()).hasSize(1);
 	}
 
 	@Test
@@ -154,8 +155,8 @@ class AuthControllerTests {
 				.andExpect(jsonPath("$.message").value("Email verified"));
 
 		var activatedUser = userRepository.findById(user.getId()).orElseThrow();
-		org.assertj.core.api.Assertions.assertThat(activatedUser.getStatus().name()).isEqualTo("ACTIVE");
-		org.assertj.core.api.Assertions.assertThat(activatedUser.getEmailVerifiedAt()).isNotNull();
+		assertThat(activatedUser.getStatus().name()).isEqualTo("ACTIVE");
+		assertThat(activatedUser.getEmailVerifiedAt()).isNotNull();
 	}
 
 	@Test
