@@ -9,4 +9,46 @@
 	</parent>
 	<artifactId>monad-academy-db</artifactId>
 	<name>monad-academy-db</name>
+
+	<properties>
+		<liquibase.changelogSchemaName>monad_academy</liquibase.changelogSchemaName>
+		<liquibase.defaultSchemaName>monad_academy</liquibase.defaultSchemaName>
+		<liquibase.driver>org.postgresql.Driver</liquibase.driver>
+		<liquibase.password>monad_academy</liquibase.password>
+		<liquibase.url>jdbc:postgresql://localhost:5432/monad_academy</liquibase.url>
+		<liquibase.username>monad_academy</liquibase.username>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase.version}</version>
+				<configuration>
+					<changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
+					<changelogSchemaName>${liquibase.changelogSchemaName}</changelogSchemaName>
+					<clearCheckSums>false</clearCheckSums>
+					<defaultSchemaName>${liquibase.defaultSchemaName}</defaultSchemaName>
+					<driver>${liquibase.driver}</driver>
+					<password>${liquibase.password}</password>
+					<searchPath>${project.basedir}/src/main/resources</searchPath>
+					<url>${liquibase.url}</url>
+					<username>${liquibase.username}</username>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>${postgresql.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>commons-io</groupId>
+						<artifactId>commons-io</artifactId>
+						<version>${commons-io.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 </project>

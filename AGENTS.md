@@ -156,6 +156,13 @@ Run tests:
 ./mvnw test
 ```
 
+Run database migrations manually:
+
+```bash
+docker compose exec postgres psql -U monad_academy -d monad_academy -c "create schema if not exists monad_academy"
+./mvnw -pl monad-academy-db liquibase:update
+```
+
 Always use Maven Wrapper:
 
 ```bash
