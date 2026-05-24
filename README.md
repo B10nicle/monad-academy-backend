@@ -32,3 +32,5 @@ Run tests:
 ```bash
 ./mvnw test
 ```
+
+Tests use Testcontainers with PostgreSQL, so Docker must be running.
