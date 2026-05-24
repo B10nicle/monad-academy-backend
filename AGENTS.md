@@ -86,8 +86,7 @@ Testing stack:
 
 - JUnit 5
 - Spring Boot Test
-- H2 (temporary/simple tests)
-- PostgreSQL/Testcontainers where appropriate
+- PostgreSQL/Testcontainers
 
 ---
 
