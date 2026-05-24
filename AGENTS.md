@@ -503,6 +503,11 @@ Tests should be:
 - readable
 - minimal but sufficient
 
+Test assertions should:
+
+- use AssertJ static imports such as `assertThat`, `assertThatThrownBy`, and `catchThrowableOfType`
+- avoid fully qualified calls such as `org.assertj.core.api.Assertions.assertThat(...)`
+
 Avoid flaky tests.
 
 ---
