@@ -15,7 +15,7 @@ import com.monadacademy.backend.entity.TaskTestCase;
  *
  * @author Monad Academy Agent
  */
-@Mapper(componentModel = "spring")
+@Mapper
 public interface TaskMapper {
 
 	@Mapping(target = "testCases", source = "testCases")

@@ -81,6 +81,16 @@
 							</path>
 						</annotationProcessorPaths>
 					</configuration>
+					<executions>
+						<execution>
+							<id>default-compile</id>
+							<configuration>
+								<compilerArgs>
+									<arg>-Amapstruct.defaultComponentModel=spring</arg>
+								</compilerArgs>
+							</configuration>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>

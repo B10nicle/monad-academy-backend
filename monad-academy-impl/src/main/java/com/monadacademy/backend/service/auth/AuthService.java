@@ -26,12 +26,14 @@ import com.monadacademy.backend.service.email.EmailSender;
 import com.monadacademy.backend.service.email.EmailVerificationTokenService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Orchestrates registration, verification, resend, and login flows.
  *
  * @author Monad Academy Agent
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -66,12 +68,14 @@ public class AuthService {
 		var token = tokenService.createToken(user);
 		emailSender.sendVerificationEmail(user.getEmail(), verificationLink(token));
 		auditLogService.log(user, AuditEventType.USER_REGISTERED, null);
+		log.info("Registered userId={} username={}", user.getId(), user.getUsername());
 		return new MessageResponse(REGISTRATION_MESSAGE);
 	}
 
 	@Transactional
 	public MessageResponse verifyEmail(VerifyEmailRequest request) {
-		tokenService.verify(request.token());
+		var user = tokenService.verify(request.token());
+		log.info("Email verification completed for userId={}", user.getId());
 		return new MessageResponse(EMAIL_VERIFIED_MESSAGE);
 	}
 
@@ -84,6 +88,7 @@ public class AuthService {
 					var token = tokenService.createToken(user);
 					emailSender.sendVerificationEmail(user.getEmail(), verificationLink(token));
 					auditLogService.log(user, AuditEventType.USER_VERIFICATION_EMAIL_RESENT, null);
+					log.info("Resent verification email for userId={}", user.getId());
 				});
 		return new MessageResponse(VERIFICATION_SENT_MESSAGE);
 	}
@@ -105,6 +110,7 @@ public class AuthService {
 		validateLoginStatus(user);
 		user.updateLastLoginAt();
 		auditLogService.log(user, AuditEventType.USER_LOGIN_SUCCEEDED, null);
+		log.info("User login succeeded for userId={}", user.getId());
 		return new AuthResponse(jwtTokenService.createToken(user));
 	}
 

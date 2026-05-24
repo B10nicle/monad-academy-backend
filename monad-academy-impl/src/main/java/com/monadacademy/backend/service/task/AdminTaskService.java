@@ -24,12 +24,14 @@ import com.monadacademy.backend.security.CurrentUserProvider;
 import com.monadacademy.backend.service.audit.AuditLogService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Orchestrates admin task management and task lifecycle operations.
  *
  * @author Monad Academy Agent
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminTaskService {
@@ -58,6 +60,7 @@ public class AdminTaskService {
 					.forEach(testCaseRequest -> testCaseRepository.save(toTestCase(task, testCaseRequest)));
 		}
 		auditLogService.log(currentUser(), AuditEventType.TASK_CREATED, metadata(task));
+		log.info("Created task id={} slug={}", task.getId(), task.getSlug());
 		return taskMapper.toResponse(task, testCaseRepository.findByTaskOrderByOrderIndexAsc(task));
 	}
 
@@ -75,6 +78,7 @@ public class AdminTaskService {
 				request.initialCode(),
 				request.solutionTemplate());
 		auditLogService.log(currentUser(), AuditEventType.TASK_UPDATED, metadata(task));
+		log.info("Updated task id={} slug={}", task.getId(), task.getSlug());
 		return taskMapper.toResponse(task, testCaseRepository.findByTaskOrderByOrderIndexAsc(task));
 	}
 
@@ -83,6 +87,7 @@ public class AdminTaskService {
 		var task = findTask(id);
 		task.publish();
 		auditLogService.log(currentUser(), AuditEventType.TASK_PUBLISHED, metadata(task));
+		log.info("Published task id={} slug={}", task.getId(), task.getSlug());
 		return taskMapper.toResponse(task, testCaseRepository.findByTaskOrderByOrderIndexAsc(task));
 	}
 
@@ -91,6 +96,7 @@ public class AdminTaskService {
 		var task = findTask(id);
 		task.archive();
 		auditLogService.log(currentUser(), AuditEventType.TASK_ARCHIVED, metadata(task));
+		log.info("Archived task id={} slug={}", task.getId(), task.getSlug());
 		return taskMapper.toResponse(task, testCaseRepository.findByTaskOrderByOrderIndexAsc(task));
 	}
 
@@ -99,6 +105,7 @@ public class AdminTaskService {
 		var task = findTask(taskId);
 		var testCase = testCaseRepository.save(toTestCase(task, request));
 		auditLogService.log(currentUser(), AuditEventType.TASK_TEST_CASE_CREATED, metadata(task));
+		log.info("Created test case id={} for taskId={}", testCase.getId(), task.getId());
 		return taskMapper.toResponse(testCase);
 	}
 

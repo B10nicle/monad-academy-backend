@@ -1,18 +1,17 @@
 package com.monadacademy.backend.service.email;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Logs verification links for local development email delivery.
  *
  * @author Monad Academy Agent
  */
+@Slf4j
 @Service
 public class LoggingEmailSender implements EmailSender {
-
-	private static final Logger log = LoggerFactory.getLogger(LoggingEmailSender.class);
 
 	@Override
 	public void sendVerificationEmail(String email, String verificationLink) {
