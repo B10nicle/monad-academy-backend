@@ -14,13 +14,9 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.monadacademy.backend.AbstractPostgresTest;
 import com.monadacademy.backend.entity.AuditEventType;
 import com.monadacademy.backend.entity.Task;
 import com.monadacademy.backend.entity.TaskDifficulty;
@@ -39,17 +35,10 @@ import com.monadacademy.backend.security.JwtTokenService;
  *
  * @author Monad Academy Agent
  */
-@Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class AdminTaskControllerTests {
-
-	@Container
-	static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18-alpine")
-			.withDatabaseName("monad_academy")
-			.withUsername("monad_academy")
-			.withPassword("monad_academy");
+class AdminTaskControllerTests extends AbstractPostgresTest {
 
 	@Autowired
 	MockMvc mockMvc;
@@ -71,13 +60,6 @@ class AdminTaskControllerTests {
 
 	@Autowired
 	TaskTestCaseRepository testCaseRepository;
-
-	@DynamicPropertySource
-	static void configurePostgres(DynamicPropertyRegistry registry) {
-		registry.add("spring.datasource.url", postgres::getJdbcUrl);
-		registry.add("spring.datasource.username", postgres::getUsername);
-		registry.add("spring.datasource.password", postgres::getPassword);
-	}
 
 	@BeforeEach
 	void setUp() {

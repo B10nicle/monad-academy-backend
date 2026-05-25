@@ -7,12 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.monadacademy.backend.AbstractPostgresTest;
 import com.monadacademy.backend.entity.Task;
 import com.monadacademy.backend.entity.TaskDifficulty;
 import com.monadacademy.backend.entity.TaskStatus;
@@ -24,29 +20,15 @@ import com.monadacademy.backend.entity.TaskTopic;
  *
  * @author Monad Academy Agent
  */
-@Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
-class TaskRepositoryTests {
-
-	@Container
-	static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18-alpine")
-			.withDatabaseName("monad_academy")
-			.withUsername("monad_academy")
-			.withPassword("monad_academy");
+class TaskRepositoryTests extends AbstractPostgresTest {
 
 	@Autowired
 	TaskRepository taskRepository;
 
 	@Autowired
 	TaskTestCaseRepository testCaseRepository;
-
-	@DynamicPropertySource
-	static void configurePostgres(DynamicPropertyRegistry registry) {
-		registry.add("spring.datasource.url", postgres::getJdbcUrl);
-		registry.add("spring.datasource.username", postgres::getUsername);
-		registry.add("spring.datasource.password", postgres::getPassword);
-	}
 
 	@BeforeEach
 	void setUp() {
