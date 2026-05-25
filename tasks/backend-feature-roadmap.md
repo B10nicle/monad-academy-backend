@@ -20,7 +20,7 @@ Legend:
 | feature/public-tasks-api | [x] | Implemented in feature/public-tasks-api |
 | feature/submissions-domain | [x] | Implemented in feature/submissions-domain |
 | feature/java-code-runner | [x] | Implemented in feature/java-code-runner |
-| feature/submission-api | [ ] | Not started |
+| feature/submission-api | [x] | Implemented in feature/submission-api |
 | feature/progress | [ ] | Not started |
 | feature/admin-submissions | [ ] | Not started |
 | feature/docker-sandbox-hardening | [ ] | Not started |
@@ -237,7 +237,7 @@ Dependencies:
 
 ## 7. feature/submission-api
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -248,6 +248,14 @@ Endpoints:
 - `POST /api/submissions`
 - `GET /api/submissions/my`
 - `GET /api/tasks/{id}/submissions/my`
+
+Delivered:
+
+- authenticated submission creation endpoint
+- authenticated current-user submission history endpoint
+- authenticated current-user task submission history endpoint
+- submission execution through Java code runner
+- persisted submission result metadata
 
 Dependencies:
 
@@ -326,7 +334,7 @@ Dependencies:
 4. feature/public-tasks-api [x]
 5. feature/submissions-domain [x]
 6. feature/java-code-runner [x]
-7. feature/submission-api
+7. feature/submission-api [x]
 8. feature/progress
 9. feature/admin-submissions
 10. feature/docker-sandbox-hardening
