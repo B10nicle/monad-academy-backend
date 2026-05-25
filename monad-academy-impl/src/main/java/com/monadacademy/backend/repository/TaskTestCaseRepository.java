@@ -16,4 +16,6 @@ import com.monadacademy.backend.entity.TaskTestCase;
 public interface TaskTestCaseRepository extends JpaRepository<TaskTestCase, UUID> {
 
 	List<TaskTestCase> findByTaskOrderByOrderIndexAsc(Task task);
+
+	List<TaskTestCase> findByTaskAndHiddenFalseOrderByOrderIndexAsc(Task task);
 }

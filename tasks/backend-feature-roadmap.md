@@ -17,7 +17,7 @@ Legend:
 | feature/auth | [x] | Implemented in PR #5 |
 | feature/tasks-domain | [x] | Implemented in feature/tasks-domain |
 | feature/admin-tasks-api | [x] | Implemented in feature/admin-tasks-api |
-| feature/public-tasks-api | [ ] | Not started |
+| feature/public-tasks-api | [x] | Implemented in feature/public-tasks-api |
 | feature/submissions-domain | [ ] | Not started |
 | feature/java-code-runner | [ ] | Not started |
 | feature/submission-api | [ ] | Not started |
@@ -143,7 +143,7 @@ Dependencies:
 
 ## 4. feature/public-tasks-api
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -153,6 +153,14 @@ Scope:
 
 - list tasks
 - get task details
+
+Delivered:
+
+- anonymous published task listing endpoint
+- anonymous published task details endpoint
+- stable pagination response DTO
+- public task DTOs that hide solutions and hidden tests
+- public task access tests with PostgreSQL Testcontainers
 
 Endpoints:
 
@@ -298,7 +306,7 @@ Dependencies:
 1. feature/auth [x]
 2. feature/tasks-domain [x]
 3. feature/admin-tasks-api [x]
-4. feature/public-tasks-api
+4. feature/public-tasks-api [x]
 5. feature/submissions-domain
 6. feature/java-code-runner
 7. feature/submission-api
