@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.monadacademy.backend.entity.Submission;
 import com.monadacademy.backend.entity.Task;
@@ -15,7 +16,7 @@ import com.monadacademy.backend.entity.User;
  *
  * @author Monad Academy Agent
  */
-public interface SubmissionRepository extends JpaRepository<Submission, UUID> {
+public interface SubmissionRepository extends JpaRepository<Submission, UUID>, JpaSpecificationExecutor<Submission> {
 
 	Page<Submission> findByUser(User user, Pageable pageable);
 

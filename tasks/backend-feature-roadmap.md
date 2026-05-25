@@ -22,7 +22,7 @@ Legend:
 | feature/java-code-runner | [x] | Implemented in feature/java-code-runner |
 | feature/submission-api | [x] | Implemented in feature/submission-api |
 | feature/progress | [x] | Implemented in feature/progress |
-| feature/admin-submissions | [ ] | Not started |
+| feature/admin-submissions | [x] | Implemented in feature/admin-submissions |
 | feature/docker-sandbox-hardening | [ ] | Not started |
 
 ---
@@ -295,7 +295,7 @@ Dependencies:
 
 ## 9. feature/admin-submissions
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -305,6 +305,14 @@ Endpoints:
 
 - `GET /api/admin/submissions`
 - `GET /api/admin/users/{id}/submissions`
+
+Delivered:
+
+- admin-only submission listing endpoint
+- admin-only user submission history endpoint
+- optional filtering by user, task, and submission status
+- normalized pagination for admin submission history
+- PostgreSQL Testcontainers controller tests
 
 Dependencies:
 
@@ -344,5 +352,5 @@ Dependencies:
 6. feature/java-code-runner [x]
 7. feature/submission-api [x]
 8. feature/progress [x]
-9. feature/admin-submissions
+9. feature/admin-submissions [x]
 10. feature/docker-sandbox-hardening
