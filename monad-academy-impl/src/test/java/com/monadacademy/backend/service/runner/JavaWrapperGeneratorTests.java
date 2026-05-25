@@ -1,0 +1,61 @@
+package com.monadacademy.backend.service.runner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+import javax.tools.ToolProvider;
+
+import org.junit.jupiter.api.Test;
+
+/**
+ * Verifies Java wrapper source generation for submitted code.
+ *
+ * @author Monad Academy Agent
+ */
+class JavaWrapperGeneratorTests {
+
+	private final JavaWrapperGenerator generator = new JavaWrapperGenerator();
+
+	@Test
+	void testGenerateWhenRequestProvidedShouldWrapSourceAndEscapedTestCases() {
+		var source = generator.generate(new JavaCodeRunRequest(
+				"return input.toUpperCase();",
+				List.of(new JavaCodeRunnerTestCase("a\"b", "A\"B"))));
+
+		assertThat(source).contains("public class Main");
+		assertThat(source).contains("public String solve(String input) throws Exception");
+		assertThat(source).contains("return input.toUpperCase();");
+		assertThat(source).contains("new TestCase(\"a\\\"b\", \"A\\\"B\")");
+	}
+
+	@Test
+	void testGenerateWhenValidSourceProvidedShouldCompileWrapper() throws Exception {
+		var source = generator.generate(new JavaCodeRunRequest(
+				"return input.toUpperCase();",
+				List.of(new JavaCodeRunnerTestCase("abc", "ABC"))));
+		var workDirectory = Files.createTempDirectory("wrapper-generator-test-");
+		var sourceFile = workDirectory.resolve("Main.java");
+		try {
+			Files.writeString(sourceFile, source);
+
+			var compiler = ToolProvider.getSystemJavaCompiler();
+			var exitCode = compiler.run(null, null, null, sourceFile.toString());
+
+			assertThat(exitCode).isZero();
+		}
+		finally {
+			delete(workDirectory);
+		}
+	}
+
+	private void delete(Path workDirectory) throws Exception {
+		try (var paths = Files.walk(workDirectory)) {
+			for (var path : paths.sorted((first, second) -> second.compareTo(first)).toList()) {
+				Files.deleteIfExists(path);
+			}
+		}
+	}
+}

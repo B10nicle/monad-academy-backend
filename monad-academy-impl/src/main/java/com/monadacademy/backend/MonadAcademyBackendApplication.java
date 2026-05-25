@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import com.monadacademy.backend.config.AppProperties;
+import com.monadacademy.backend.config.JavaCodeRunnerProperties;
 
 /**
  * Bootstraps the Monad Academy backend application.
@@ -12,7 +13,7 @@ import com.monadacademy.backend.config.AppProperties;
  * @author Monad Academy Agent
  */
 @SpringBootApplication
-@EnableConfigurationProperties(AppProperties.class)
+@EnableConfigurationProperties({AppProperties.class, JavaCodeRunnerProperties.class})
 public class MonadAcademyBackendApplication {
 
 	public static void main(String[] args) {

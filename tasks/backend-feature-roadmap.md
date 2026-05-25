@@ -19,7 +19,7 @@ Legend:
 | feature/admin-tasks-api | [x] | Implemented in feature/admin-tasks-api |
 | feature/public-tasks-api | [x] | Implemented in feature/public-tasks-api |
 | feature/submissions-domain | [x] | Implemented in feature/submissions-domain |
-| feature/java-code-runner | [ ] | Not started |
+| feature/java-code-runner | [x] | Implemented in feature/java-code-runner |
 | feature/submission-api | [ ] | Not started |
 | feature/progress | [ ] | Not started |
 | feature/admin-submissions | [ ] | Not started |
@@ -205,7 +205,7 @@ Dependencies:
 
 ## 6. feature/java-code-runner
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -219,6 +219,15 @@ Scope:
 - timeout handling
 - memory limits
 - sandbox execution
+
+Delivered:
+
+- Java wrapper generator for submitted solution code
+- Docker-backed Java code runner service
+- compile and run timeout handling
+- memory, CPU, PID, network, filesystem, capability, and privilege sandbox flags
+- execution result mapping to `SubmissionStatus`
+- runner unit tests for wrapper compilation, sandbox command flags, timeout handling, and result mapping
 
 Dependencies:
 
@@ -316,7 +325,7 @@ Dependencies:
 3. feature/admin-tasks-api [x]
 4. feature/public-tasks-api [x]
 5. feature/submissions-domain [x]
-6. feature/java-code-runner
+6. feature/java-code-runner [x]
 7. feature/submission-api
 8. feature/progress
 9. feature/admin-submissions
