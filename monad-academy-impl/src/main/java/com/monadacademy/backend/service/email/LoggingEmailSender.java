@@ -1,5 +1,6 @@
 package com.monadacademy.backend.service.email;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
+@Profile("!prod")
 public class LoggingEmailSender implements EmailSender {
 
 	@Override

@@ -12,6 +12,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.monadacademy</groupId>
 			<artifactId>monad-academy-api</artifactId>
 			<version>${project.version}</version>

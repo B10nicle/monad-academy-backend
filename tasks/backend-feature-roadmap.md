@@ -13,6 +13,7 @@ Legend:
 ## Progress Overview
 
 | Feature | Status | Notes |
+| feature/email-sender-impl | [x] | Implemented SMTP email sending for prod profile |
 |---|---:|---|
 | feature/auth | [x] | Implemented in PR #5 |
 | feature/tasks-domain | [x] | Implemented in feature/tasks-domain |
