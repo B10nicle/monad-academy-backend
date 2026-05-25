@@ -23,7 +23,7 @@ Legend:
 | feature/submission-api | [x] | Implemented in feature/submission-api |
 | feature/progress | [x] | Implemented in feature/progress |
 | feature/admin-submissions | [x] | Implemented in feature/admin-submissions |
-| feature/docker-sandbox-hardening | [ ] | Not started |
+| feature/docker-sandbox-hardening | [x] | Implemented in feature/docker-sandbox-hardening |
 
 ---
 
@@ -322,7 +322,7 @@ Dependencies:
 
 ## 10. feature/docker-sandbox-hardening
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -335,6 +335,15 @@ Scope:
 - resource limits
 - container cleanup
 - security tuning
+
+Delivered:
+
+- named Docker containers for explicit cleanup after timeouts and startup failures
+- non-root container user for compilation and execution
+- memory swap limit aligned with container memory limit
+- read-only workspace mount during execution
+- writable compile workspace with explicit host permissions for non-root `javac`
+- runner unit tests for hardened Docker command flags and timeout cleanup
 
 Dependencies:
 
@@ -353,4 +362,4 @@ Dependencies:
 7. feature/submission-api [x]
 8. feature/progress [x]
 9. feature/admin-submissions [x]
-10. feature/docker-sandbox-hardening
+10. feature/docker-sandbox-hardening [x]
