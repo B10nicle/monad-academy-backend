@@ -44,7 +44,7 @@ public class EmailVerificationTokenService {
 		var expiresAt = Instant.now().plus(appProperties.emailVerificationTokenTtl());
 		var token = new EmailVerificationToken(user, hash(rawToken), expiresAt);
 		tokenRepository.save(token);
-		log.info("Created email verification token for userId={}", user.getId());
+		log.debug("Created email verification token for userId={}", user.getId());
 		return rawToken;
 	}
 
@@ -65,7 +65,7 @@ public class EmailVerificationTokenService {
 		user.activate();
 		token.confirm();
 		auditLogService.log(user, AuditEventType.USER_EMAIL_VERIFIED, null);
-		log.info("Verified email for userId={}", user.getId());
+		log.debug("Verified email for userId={}", user.getId());
 		return user;
 	}
 

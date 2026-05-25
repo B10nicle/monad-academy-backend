@@ -15,6 +15,6 @@ public class LoggingEmailSender implements EmailSender {
 
 	@Override
 	public void sendVerificationEmail(String email, String verificationLink) {
-		log.info("Verification email for {}: {}", email, verificationLink);
+		log.debug("Verification email for {}: {}", email, verificationLink);
 	}
 }
