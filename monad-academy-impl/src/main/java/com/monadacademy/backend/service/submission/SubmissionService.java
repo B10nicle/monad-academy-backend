@@ -2,8 +2,12 @@ package com.monadacademy.backend.service.submission;
 
 import java.util.UUID;
 
+import jakarta.persistence.criteria.Predicate;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +16,7 @@ import com.monadacademy.backend.dto.PageResponse;
 import com.monadacademy.backend.dto.SubmissionRequest;
 import com.monadacademy.backend.dto.SubmissionResponse;
 import com.monadacademy.backend.entity.Submission;
+import com.monadacademy.backend.entity.SubmissionStatus;
 import com.monadacademy.backend.entity.Task;
 import com.monadacademy.backend.entity.TaskStatus;
 import com.monadacademy.backend.entity.User;
@@ -42,6 +47,11 @@ import lombok.extern.slf4j.Slf4j;
 public class SubmissionService {
 
 	private static final int MAX_PAGE_SIZE = 100;
+	private static final String ID_FIELD = "id";
+	private static final String TASK_FIELD = "task";
+	private static final String USER_FIELD = "user";
+	private static final String STATUS_FIELD = "status";
+	private static final String CREATED_AT_FIELD = "createdAt";
 
 	private final JavaCodeRunner javaCodeRunner;
 	private final UserRepository userRepository;
@@ -97,6 +107,37 @@ public class SubmissionService {
 		return new PageResponse<>(content, submissions.getNumber(), submissions.getSize(), submissions.getTotalElements(), submissions.getTotalPages());
 	}
 
+	@Transactional(readOnly = true)
+	public PageResponse<SubmissionResponse> listAdminSubmissions(
+			UUID userId,
+			UUID taskId,
+			SubmissionStatus status,
+			int page,
+			int size) {
+		var submissions = submissionRepository.findAll(adminSubmissionSpec(userId, taskId, status), pageable(page, size));
+		var response = toPageResponse(submissions);
+		log.debug("Loaded admin submissions userId={} taskId={} status={} page={} size={} resultCount={}",
+				userId, taskId, status, page, size, response.content().size());
+		return response;
+	}
+
+	@Transactional(readOnly = true)
+	public PageResponse<SubmissionResponse> listAdminUserSubmissions(
+			UUID userId,
+			UUID taskId,
+			SubmissionStatus status,
+			int page,
+			int size) {
+		if (!userRepository.existsById(userId)) {
+			throw new AppException(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+		var submissions = submissionRepository.findAll(adminSubmissionSpec(userId, taskId, status), pageable(page, size));
+		var response = toPageResponse(submissions);
+		log.debug("Loaded admin user submissions userId={} taskId={} status={} page={} size={} resultCount={}",
+				userId, taskId, status, page, size, response.content().size());
+		return response;
+	}
+
 	private User currentUser() {
 		var currentUser = currentUserProvider.getCurrentUser();
 		if (currentUser == null) {
@@ -111,8 +152,31 @@ public class SubmissionService {
 				.orElseThrow(() -> new AppException(ErrorCode.TASK_NOT_FOUND, HttpStatus.NOT_FOUND));
 	}
 
+	private Specification<Submission> adminSubmissionSpec(UUID userId, UUID taskId, SubmissionStatus status) {
+		return (root, query, criteriaBuilder) -> {
+			Predicate predicate = criteriaBuilder.conjunction();
+			if (userId != null) {
+				predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(USER_FIELD).get(ID_FIELD), userId));
+			}
+			if (taskId != null) {
+				predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(TASK_FIELD).get(ID_FIELD), taskId));
+			}
+			if (status != null) {
+				predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(STATUS_FIELD), status));
+			}
+			return predicate;
+		};
+	}
+
+	private PageResponse<SubmissionResponse> toPageResponse(Page<Submission> submissions) {
+		var content = submissions.getContent().stream()
+				.map(submissionMapper::toResponse)
+				.toList();
+		return new PageResponse<>(content, submissions.getNumber(), submissions.getSize(), submissions.getTotalElements(), submissions.getTotalPages());
+	}
+
 	private PageRequest pageable(int page, int size) {
-		return PageRequest.of(normalizePage(page), normalizeSize(size), Sort.by("createdAt").descending());
+		return PageRequest.of(normalizePage(page), normalizeSize(size), Sort.by(CREATED_AT_FIELD).descending());
 	}
 
 	private int normalizePage(int page) {
