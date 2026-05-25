@@ -23,6 +23,7 @@ import com.monadacademy.backend.repository.TaskRepository;
 import com.monadacademy.backend.repository.TaskTestCaseRepository;
 import com.monadacademy.backend.repository.UserRepository;
 import com.monadacademy.backend.security.CurrentUserProvider;
+import com.monadacademy.backend.service.progress.UserTaskProgressService;
 import com.monadacademy.backend.service.runner.JavaCodeRunRequest;
 import com.monadacademy.backend.service.runner.JavaCodeRunner;
 import com.monadacademy.backend.service.runner.JavaCodeRunnerTestCase;
@@ -46,6 +47,7 @@ public class SubmissionService {
 	private final UserRepository userRepository;
 	private final TaskRepository taskRepository;
 	private final SubmissionMapper submissionMapper;
+	private final UserTaskProgressService progressService;
 	private final SubmissionRepository submissionRepository;
 	private final CurrentUserProvider currentUserProvider;
 	private final TaskTestCaseRepository testCaseRepository;
@@ -63,6 +65,7 @@ public class SubmissionService {
 						.toList()));
 		submission.complete(runResult.status(), runResult.executionMetadata(), runResult.executionDurationMs());
 		var savedSubmission = submissionRepository.save(submission);
+		progressService.recordSubmission(user, task, savedSubmission.getStatus());
 		log.debug("Created submission id={} taskId={} userId={} status={}",
 				savedSubmission.getId(), task.getId(), user.getId(), savedSubmission.getStatus());
 		return submissionMapper.toResponse(savedSubmission);

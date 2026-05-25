@@ -11,4 +11,5 @@
 	<include file="db/changelog/changes/04-create-tasks.xml"/>
 	<include file="db/changelog/changes/05-create-task-test-cases.xml"/>
 	<include file="db/changelog/changes/06-create-submissions.xml"/>
+	<include file="db/changelog/changes/07-create-user-task-progress.xml"/>
 </databaseChangeLog>
