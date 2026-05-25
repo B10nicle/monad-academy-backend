@@ -39,8 +39,11 @@ app:
     docker-image: eclipse-temurin:25-jdk-alpine
     compile-timeout: 10s
     run-timeout: 3s
+    cleanup-timeout: 2s
     memory-limit: 128m
+    memory-swap-limit: 128m
     java-heap-limit: 64m
     cpus: "0.5"
     pids-limit: 64
     tmpfs-size: 64m
+    container-user: "65534:65534"

@@ -23,30 +23,46 @@ class DockerJavaCodeRunnerTests {
 			"eclipse-temurin:25-jdk-alpine",
 			Duration.ofSeconds(10),
 			Duration.ofSeconds(3),
+			Duration.ofSeconds(2),
+			"128m",
 			"128m",
 			"64m",
 			"0.5",
 			64,
-			"64m");
+			"64m",
+			"65534:65534");
 
 	@Test
 	void testBuildDockerCommandWhenCalledShouldApplySandboxLimits() {
 		var runner = new DockerJavaCodeRunner(new FakeCommandExecutor(List.of()), new JavaWrapperGenerator(), properties);
 
-		var command = runner.buildDockerCommand("/tmp/work", List.of("java", "-Xmx64m", "Main"));
+		var command = runner.buildDockerCommand("/tmp/work", List.of("java", "-Xmx64m", "Main"), "runner-test", false);
 
 		assertThat(command).containsSequence("docker", "run", "--rm");
+		assertThat(command).containsSequence("--name", "runner-test");
 		assertThat(command).containsSequence("--network", "none");
+		assertThat(command).containsSequence("--user", "65534:65534");
 		assertThat(command).containsSequence("--cap-drop", "ALL");
 		assertThat(command).containsSequence("--security-opt", "no-new-privileges");
 		assertThat(command).contains("--read-only");
 		assertThat(command).containsSequence("--memory", "128m");
+		assertThat(command).containsSequence("--memory-swap", "128m");
 		assertThat(command).containsSequence("--cpus", "0.5");
 		assertThat(command).containsSequence("--pids-limit", "64");
 		assertThat(command).containsSequence("--tmpfs", "/tmp:rw,noexec,nosuid,size=64m");
-		assertThat(command).containsSequence("-v", "/tmp/work:/workspace:rw");
+		assertThat(command).containsSequence("--mount", "type=bind,source=/tmp/work,target=/workspace,readonly");
 		assertThat(command).containsSequence("-w", "/workspace");
 		assertThat(command).contains("eclipse-temurin:25-jdk-alpine");
+	}
+
+	@Test
+	void testBuildDockerCommandWhenCompilingShouldUseWritableWorkspace() {
+		var runner = new DockerJavaCodeRunner(new FakeCommandExecutor(List.of()), new JavaWrapperGenerator(), properties);
+
+		var command = runner.buildDockerCommand("/tmp/work", List.of("javac", "Main.java"), "runner-test", true);
+
+		assertThat(command).containsSequence("--mount", "type=bind,source=/tmp/work,target=/workspace");
+		assertThat(command).doesNotContain("type=bind,source=/tmp/work,target=/workspace,readonly");
 	}
 
 	@Test
@@ -65,13 +81,15 @@ class DockerJavaCodeRunnerTests {
 	void testRunWhenExecutionTimesOutShouldReturnTimeLimitExceeded() {
 		var executor = new FakeCommandExecutor(List.of(
 				new CommandExecutionResult(0, false, "", "", 12),
-				new CommandExecutionResult(-1, true, "", "", 3000)));
+				new CommandExecutionResult(-1, true, "", "", 3000),
+				new CommandExecutionResult(0, false, "", "", 20)));
 		var runner = new DockerJavaCodeRunner(executor, new JavaWrapperGenerator(), properties);
 
 		var result = runner.run(request());
 
 		assertThat(result.status()).isEqualTo(SubmissionStatus.TIME_LIMIT_EXCEEDED);
-		assertThat(executor.commands()).hasSize(2);
+		assertThat(executor.commands()).hasSize(3);
+		assertThat(executor.commands().get(2)).containsSequence("docker", "rm", "-f");
 	}
 
 	@Test

@@ -14,9 +14,12 @@ public record JavaCodeRunnerProperties(
 		String dockerImage,
 		Duration compileTimeout,
 		Duration runTimeout,
+		Duration cleanupTimeout,
 		String memoryLimit,
+		String memorySwapLimit,
 		String javaHeapLimit,
 		String cpus,
 		int pidsLimit,
-		String tmpfsSize) {
+		String tmpfsSize,
+		String containerUser) {
 }

@@ -500,6 +500,18 @@ Web/API tests where meaningful.
 
 Security tests when auth changes.
 
+## Java Runner Sandbox
+
+The Docker-backed Java runner must keep the execution container hardened:
+
+- disable networking with `--network none`
+- run as a non-root user
+- keep the root filesystem read-only
+- mount runtime workspace as read-only
+- enforce memory, memory-swap, CPU, PID, and tmpfs limits
+- drop Linux capabilities and prevent privilege escalation
+- use named containers and explicit cleanup for timeout/error paths
+
 Tests should be:
 
 - deterministic
