@@ -32,6 +32,7 @@ import com.monadacademy.backend.repository.SubmissionRepository;
 import com.monadacademy.backend.repository.TaskRepository;
 import com.monadacademy.backend.repository.TaskTestCaseRepository;
 import com.monadacademy.backend.repository.UserRepository;
+import com.monadacademy.backend.repository.UserTaskProgressRepository;
 import com.monadacademy.backend.security.JwtTokenService;
 import com.monadacademy.backend.service.runner.JavaCodeRunRequest;
 import com.monadacademy.backend.service.runner.JavaCodeRunResult;
@@ -69,10 +70,14 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 	TaskTestCaseRepository testCaseRepository;
 
 	@Autowired
+	UserTaskProgressRepository progressRepository;
+
+	@Autowired
 	FakeJavaCodeRunner javaCodeRunner;
 
 	@BeforeEach
 	void setUp() {
+		progressRepository.deleteAll();
 		submissionRepository.deleteAll();
 		testCaseRepository.deleteAll();
 		taskRepository.deleteAll();
@@ -110,7 +115,10 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 				.andExpect(jsonPath("$.executionDurationMs").value(42));
 
 		var submission = submissionRepository.findAll().getFirst();
+		var progress = progressRepository.findByUserAndTask(user, task).orElseThrow();
 		assertThat(submission.getStatus()).isEqualTo(SubmissionStatus.ACCEPTED);
+		assertThat(progress.getAttemptsCount()).isEqualTo(1);
+		assertThat(progress.getSolvedAt()).isNotNull();
 		assertThat(javaCodeRunner.lastRequest().sourceCode()).isEqualTo("return input.toUpperCase();");
 		assertThat(javaCodeRunner.lastRequest().testCases()).hasSize(2);
 	}

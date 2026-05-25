@@ -21,7 +21,7 @@ Legend:
 | feature/submissions-domain | [x] | Implemented in feature/submissions-domain |
 | feature/java-code-runner | [x] | Implemented in feature/java-code-runner |
 | feature/submission-api | [x] | Implemented in feature/submission-api |
-| feature/progress | [ ] | Not started |
+| feature/progress | [x] | Implemented in feature/progress |
 | feature/admin-submissions | [ ] | Not started |
 | feature/docker-sandbox-hardening | [ ] | Not started |
 
@@ -266,7 +266,7 @@ Dependencies:
 
 ## 8. feature/progress
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -278,6 +278,14 @@ Scope:
 - attempts count
 - solved state
 - progress aggregation
+
+Delivered:
+
+- `UserTaskProgress` entity and status enum
+- Liquibase migration for `user_task_progress`
+- progress repository lookup and solved-count aggregation
+- automatic progress updates after submission execution
+- PostgreSQL Testcontainers repository and API flow tests
 
 Dependencies:
 
@@ -335,6 +343,6 @@ Dependencies:
 5. feature/submissions-domain [x]
 6. feature/java-code-runner [x]
 7. feature/submission-api [x]
-8. feature/progress
+8. feature/progress [x]
 9. feature/admin-submissions
 10. feature/docker-sandbox-hardening
