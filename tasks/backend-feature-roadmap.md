@@ -18,7 +18,7 @@ Legend:
 | feature/tasks-domain | [x] | Implemented in feature/tasks-domain |
 | feature/admin-tasks-api | [x] | Implemented in feature/admin-tasks-api |
 | feature/public-tasks-api | [x] | Implemented in feature/public-tasks-api |
-| feature/submissions-domain | [ ] | Not started |
+| feature/submissions-domain | [x] | Implemented in feature/submissions-domain |
 | feature/java-code-runner | [ ] | Not started |
 | feature/submission-api | [ ] | Not started |
 | feature/progress | [ ] | Not started |
@@ -175,7 +175,7 @@ Dependencies:
 
 ## 5. feature/submissions-domain
 
-Status: [ ] Not started
+Status: [x] Completed
 
 Goal:
 
@@ -187,6 +187,14 @@ Scope:
 - `SubmissionStatus`
 - submission history
 - execution metadata
+
+Delivered:
+
+- `Submission` entity with source code, status, execution metadata, and execution duration
+- `SubmissionStatus` lifecycle/result enum
+- Liquibase migration for `submissions`
+- submission repository history queries
+- PostgreSQL Testcontainers repository tests
 
 Dependencies:
 
@@ -307,7 +315,7 @@ Dependencies:
 2. feature/tasks-domain [x]
 3. feature/admin-tasks-api [x]
 4. feature/public-tasks-api [x]
-5. feature/submissions-domain
+5. feature/submissions-domain [x]
 6. feature/java-code-runner
 7. feature/submission-api
 8. feature/progress
