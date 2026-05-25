@@ -21,6 +21,8 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
 
 	Optional<Task> findBySlug(String slug);
 
+	Optional<Task> findByIdAndStatus(UUID id, TaskStatus status);
+
 	Page<Task> findByStatus(TaskStatus status, Pageable pageable);
 
 	Optional<Task> findBySlugAndStatus(String slug, TaskStatus status);
