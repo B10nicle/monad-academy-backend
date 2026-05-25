@@ -11,12 +11,14 @@ import com.monadacademy.backend.repository.UserRepository;
 import com.monadacademy.backend.security.CurrentUserProvider;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Loads data for the currently authenticated user.
  *
  * @author Monad Academy Agent
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -32,6 +34,7 @@ public class UserService {
 		}
 		var user = userRepository.findById(currentUser.id())
 				.orElseThrow(() -> new AppException(ErrorCode.INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED));
+		log.debug("Loaded current user id={} role={} status={}", user.getId(), user.getRole(), user.getStatus());
 		return new UserResponse(user.getId(), user.getEmail(), user.getUsername(), user.getRole(), user.getStatus());
 	}
 }

@@ -60,7 +60,7 @@ public class AdminTaskService {
 					.forEach(testCaseRequest -> testCaseRepository.save(toTestCase(task, testCaseRequest)));
 		}
 		auditLogService.log(currentUser(), AuditEventType.TASK_CREATED, metadata(task));
-		log.info("Created task id={} slug={}", task.getId(), task.getSlug());
+		log.debug("Created task id={} slug={}", task.getId(), task.getSlug());
 		return taskMapper.toResponse(task, testCaseRepository.findByTaskOrderByOrderIndexAsc(task));
 	}
 
@@ -78,7 +78,7 @@ public class AdminTaskService {
 				request.initialCode(),
 				request.solutionTemplate());
 		auditLogService.log(currentUser(), AuditEventType.TASK_UPDATED, metadata(task));
-		log.info("Updated task id={} slug={}", task.getId(), task.getSlug());
+		log.debug("Updated task id={} slug={}", task.getId(), task.getSlug());
 		return taskMapper.toResponse(task, testCaseRepository.findByTaskOrderByOrderIndexAsc(task));
 	}
 
@@ -87,7 +87,7 @@ public class AdminTaskService {
 		var task = findTask(id);
 		task.publish();
 		auditLogService.log(currentUser(), AuditEventType.TASK_PUBLISHED, metadata(task));
-		log.info("Published task id={} slug={}", task.getId(), task.getSlug());
+		log.debug("Published task id={} slug={}", task.getId(), task.getSlug());
 		return taskMapper.toResponse(task, testCaseRepository.findByTaskOrderByOrderIndexAsc(task));
 	}
 
@@ -96,7 +96,7 @@ public class AdminTaskService {
 		var task = findTask(id);
 		task.archive();
 		auditLogService.log(currentUser(), AuditEventType.TASK_ARCHIVED, metadata(task));
-		log.info("Archived task id={} slug={}", task.getId(), task.getSlug());
+		log.debug("Archived task id={} slug={}", task.getId(), task.getSlug());
 		return taskMapper.toResponse(task, testCaseRepository.findByTaskOrderByOrderIndexAsc(task));
 	}
 
@@ -105,7 +105,7 @@ public class AdminTaskService {
 		var task = findTask(taskId);
 		var testCase = testCaseRepository.save(toTestCase(task, request));
 		auditLogService.log(currentUser(), AuditEventType.TASK_TEST_CASE_CREATED, metadata(task));
-		log.info("Created test case id={} for taskId={}", testCase.getId(), task.getId());
+		log.debug("Created test case id={} for taskId={}", testCase.getId(), task.getId());
 		return taskMapper.toResponse(testCase);
 	}
 

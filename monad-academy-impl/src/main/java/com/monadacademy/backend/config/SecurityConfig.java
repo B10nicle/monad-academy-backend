@@ -21,16 +21,20 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.monadacademy.backend.entity.UserRole;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Configures stateless API security with OAuth2 Resource Server JWT support.
  *
  * @author Monad Academy Agent
  */
+@Slf4j
 @Configuration
 public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		log.debug("Configuring stateless API security filter chain");
 		return http
 				.csrf(AbstractHttpConfigurer::disable)
 				.httpBasic(AbstractHttpConfigurer::disable)
@@ -59,6 +63,7 @@ public class SecurityConfig {
 		converter.setJwtGrantedAuthoritiesConverter(jwt -> {
 			var role = jwt.getClaimAsString("role");
 			if (role == null) {
+				log.debug("JWT does not contain role claim");
 				return java.util.List.of();
 			}
 			return java.util.List.of(new SimpleGrantedAuthority("ROLE_" + role));

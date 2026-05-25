@@ -13,12 +13,14 @@ import com.monadacademy.backend.config.AppProperties;
 import com.monadacademy.backend.entity.User;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Creates JWT access tokens through Spring Security OAuth2 infrastructure.
  *
  * @author Monad Academy Agent
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtTokenService {
@@ -35,6 +37,8 @@ public class JwtTokenService {
 				.claim("role", user.getRole().name())
 				.build();
 		var headers = JwsHeader.with(MacAlgorithm.HS256).build();
-		return jwtEncoder.encode(JwtEncoderParameters.from(headers, claims)).getTokenValue();
+		var token = jwtEncoder.encode(JwtEncoderParameters.from(headers, claims)).getTokenValue();
+		log.debug("Created access token for userId={} role={}", user.getId(), user.getRole());
+		return token;
 	}
 }
