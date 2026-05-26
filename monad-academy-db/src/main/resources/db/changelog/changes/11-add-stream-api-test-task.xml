@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/db.changelog-4.0.xsd">
+
+    <changeSet id="11-add-stream-api-test-task" author="Monad Academy Agent">
+        <sql>
+            INSERT INTO tasks (id, title, slug, description, difficulty, topic, status, created_at, updated_at)
+            VALUES (
+                nextval('tasks_id_seq'), 
+                'Stream API: Анализ команды', 
+                'stream-api-team-analysis', 
+                'Напишите метод, который принимает список сотрудников и возвращает имена разработчиков с зарплатой выше заданной, отсортированные по алфавиту. Используйте класс Employee { String name; String department; double salary; }', 
+                'EASY', 
+                'STREAM_API', 
+                'PUBLISHED', 
+                now(), 
+                now()
+            );
+
+            INSERT INTO task_test_cases (task_id, input_data, expected_output, is_hidden)
+            VALUES (
+                (SELECT id FROM tasks WHERE slug = 'stream-api-team-analysis'), 
+                '[{"name": "Zoe", "dept": "Dev", "salary": 7000}, {"name": "Adam", "dept": "Dev", "salary": 8000}]', 
+                '["Adam", "Zoe"]', 
+                false
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
