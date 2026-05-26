@@ -146,6 +146,13 @@ Start infrastructure:
 docker compose up -d
 ```
 
+Local SMTP is provided by Mailpit:
+
+```text
+SMTP: localhost:1025
+UI: http://localhost:8025
+```
+
 Run application:
 
 ```bash
