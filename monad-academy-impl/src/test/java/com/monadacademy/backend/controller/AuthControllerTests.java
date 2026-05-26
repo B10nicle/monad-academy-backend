@@ -176,6 +176,20 @@ class AuthControllerTests extends AbstractPostgresTest {
 	}
 
 	@Test
+	void testResendVerificationWhenAuthorizationHeaderInvalidShouldIgnoreBearerToken() throws Exception {
+		mockMvc.perform(post("/api/auth/resend-verification")
+						.header("Authorization", "Bearer invalid-token")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("""
+								{
+								  "email": "unknown@example.com"
+								}
+								"""))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.message").value("If the email exists, verification instructions have been sent"));
+	}
+
+	@Test
 	void testLoginWhenUserIsActiveShouldReturnToken() throws Exception {
 		createActiveUser("user@example.com", "b10nicle");
 

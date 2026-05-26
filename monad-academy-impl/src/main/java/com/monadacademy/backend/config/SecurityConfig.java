@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +19,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
+import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.monadacademy.backend.entity.UserRole;
@@ -32,6 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 public class SecurityConfig {
+
+	private static final String API_AUTH_PATH_PREFIX = "/api/auth/";
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -55,8 +61,21 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.GET, "/api/tasks", "/api/tasks/**").permitAll()
 						.requestMatchers("/api/admin/**").hasRole(UserRole.ADMIN.name())
 						.anyRequest().authenticated())
-				.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+				.oauth2ResourceServer(oauth2 -> oauth2
+						.bearerTokenResolver(bearerTokenResolver())
+						.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
 				.build();
+	}
+
+	@Bean
+	BearerTokenResolver bearerTokenResolver() {
+		var delegate = new DefaultBearerTokenResolver();
+		return request -> {
+			if (isPublicAuthRequest(request)) {
+				return null;
+			}
+			return delegate.resolve(request);
+		};
 	}
 
 	@Bean
@@ -87,5 +106,9 @@ public class SecurityConfig {
 
 	private SecretKeySpec jwtSecret(AppProperties appProperties) {
 		return new SecretKeySpec(appProperties.jwt().secret().getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+	}
+
+	private boolean isPublicAuthRequest(HttpServletRequest request) {
+		return request.getRequestURI().startsWith(API_AUTH_PATH_PREFIX);
 	}
 }
