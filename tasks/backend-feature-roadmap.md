@@ -13,9 +13,9 @@ Legend:
 ## Progress Overview
 
 | Feature | Status | Notes |
-| feature/email-sender-impl | [x] | Implemented SMTP email sending for prod profile |
 |---|---:|---|
 | feature/auth | [x] | Implemented in PR #5 |
+| feature/email-sender-implementation | [x] | Implemented SMTP email delivery |
 | feature/tasks-domain | [x] | Implemented in feature/tasks-domain |
 | feature/admin-tasks-api | [x] | Implemented in feature/admin-tasks-api |
 | feature/public-tasks-api | [x] | Implemented in feature/public-tasks-api |

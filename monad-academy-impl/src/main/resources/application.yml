@@ -18,6 +18,17 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.xml
     default-schema: monad_academy
     liquibase-schema: monad_academy
+  mail:
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH:false}
+          starttls:
+            enable: ${SMTP_STARTTLS_ENABLE:false}
 
 management:
   endpoints:

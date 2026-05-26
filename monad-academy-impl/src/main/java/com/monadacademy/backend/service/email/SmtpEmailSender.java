@@ -1,6 +1,6 @@
 package com.monadacademy.backend.service.email;
 
-import org.springframework.context.annotation.Profile;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,14 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
-@Profile("prod")
 @RequiredArgsConstructor
 public class SmtpEmailSender implements EmailSender {
+
+	private static final String VERIFICATION_EMAIL_SUBJECT = "Verify your Monad Academy account";
+	private static final String VERIFICATION_EMAIL_TEMPLATE = """
+			<p>Please click the following link to verify your Monad Academy account:</p>
+			<p><a href="%s">Verify email</a></p>
+			""";
 
 	private final JavaMailSender mailSender;
 
@@ -31,14 +36,15 @@ public class SmtpEmailSender implements EmailSender {
 			var helper = new MimeMessageHelper(message, true, "UTF-8");
 
 			helper.setTo(email);
-			helper.setSubject("Verify your Monad Academy account");
-			helper.setText("Please click the following link to verify your account: " + verificationLink, true);
+			helper.setSubject(VERIFICATION_EMAIL_SUBJECT);
+			helper.setText(VERIFICATION_EMAIL_TEMPLATE.formatted(verificationLink), true);
 
 			mailSender.send(message);
 			log.debug("Verification email sent successfully to {}", email);
-		} catch (MessagingException e) {
-			log.error("Failed to send verification email to {}: {}", email, e.getMessage());
-			throw new RuntimeException("Email delivery failed", e);
+		}
+		catch (MailException | MessagingException exception) {
+			log.error("Failed to send verification email to {}", email, exception);
+			throw new IllegalStateException("Email delivery failed", exception);
 		}
 	}
 }

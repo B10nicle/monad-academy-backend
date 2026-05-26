@@ -187,7 +187,7 @@ Requirements:
 Implement:
 
 - `EmailSender`
-- `LoggingEmailSender`
+- `SmtpEmailSender`
 
 Configuration:
 
@@ -195,6 +195,10 @@ Configuration:
 app:
   frontend-base-url: http://localhost:3000
   email-verification-token-ttl: 24h
+spring:
+  mail:
+    host: localhost
+    port: 1025
 ```
 
 Verification link:
