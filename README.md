@@ -15,10 +15,16 @@ Spring Boot backend for Monad Academy, a lightweight coding practice platform in
 
 ## Local Development
 
-Start PostgreSQL with Docker Compose:
+Start PostgreSQL and local SMTP with Docker Compose:
 
 ```bash
 docker compose up -d
+```
+
+Local verification emails are captured by Mailpit:
+
+```text
+http://localhost:8025
 ```
 
 Run the application:
