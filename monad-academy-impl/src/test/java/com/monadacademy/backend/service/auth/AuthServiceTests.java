@@ -2,6 +2,7 @@ package com.monadacademy.backend.service.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,9 +55,23 @@ class AuthServiceTests {
 	EmailVerificationTokenService tokenService;
 
 	private final AppProperties appProperties = new AppProperties(
-			"http://localhost:3000",
+			"http://localhost:4200",
 			Duration.ofHours(24),
 			new AppProperties.Jwt("test-secret-test-secret-test-secret-test-secret", Duration.ofHours(1)));
+
+	@Test
+	void testRegisterWhenUserCreatedShouldSendFrontendVerificationLink() {
+		var authService = authService();
+		var request = new RegisterRequest(" USER@example.com ", "b10nicle", "password");
+		when(passwordEncoder.encode("password")).thenReturn("password-hash");
+		when(tokenService.createToken(any(User.class))).thenReturn("raw-token");
+
+		authService.register(request);
+
+		verify(emailSender).sendVerificationEmail(
+				"user@example.com",
+				"http://localhost:4200/verify-email?token=raw-token");
+	}
 
 	@Test
 	void testRegisterWhenEmailAlreadyExistsShouldThrowException() {

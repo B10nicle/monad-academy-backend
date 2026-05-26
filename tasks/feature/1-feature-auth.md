@@ -193,7 +193,7 @@ Configuration:
 
 ```yaml
 app:
-  frontend-base-url: http://localhost:3000
+  frontend-base-url: http://localhost:4200
   email-verification-token-ttl: 24h
 spring:
   mail:

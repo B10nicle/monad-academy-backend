@@ -34,7 +34,7 @@ class JwtTokenServiceTests {
 	private final JwtTokenService jwtTokenService = new JwtTokenService(
 			new NimbusJwtEncoder(new ImmutableSecret<>(jwtSecret())),
 			new AppProperties(
-					"http://localhost:3000",
+					"http://localhost:4200",
 					Duration.ofHours(24),
 					new AppProperties.Jwt(JWT_SECRET, Duration.ofHours(1))));
 

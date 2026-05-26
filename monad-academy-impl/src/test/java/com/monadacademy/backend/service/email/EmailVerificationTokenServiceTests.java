@@ -39,7 +39,7 @@ class EmailVerificationTokenServiceTests {
 	EmailVerificationTokenRepository tokenRepository;
 
 	private final AppProperties appProperties = new AppProperties(
-			"http://localhost:3000",
+			"http://localhost:4200",
 			Duration.ofHours(24),
 			new AppProperties.Jwt("test-secret-test-secret-test-secret-test-secret", Duration.ofHours(1)));
 
