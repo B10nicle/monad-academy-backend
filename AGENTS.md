@@ -153,6 +153,12 @@ SMTP: localhost:1025
 UI: http://localhost:8025
 ```
 
+Email verification links use `FRONTEND_BASE_URL`, defaulting to:
+
+```text
+http://localhost:4200
+```
+
 Run application:
 
 ```bash

@@ -17,7 +17,7 @@ spring:
     liquibase-schema: monad_academy
 
 app:
-  frontend-base-url: http://localhost:3000
+  frontend-base-url: http://localhost:4200
   email-verification-token-ttl: 24h
   jwt:
     secret: test-secret-test-secret-test-secret-test-secret

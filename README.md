@@ -27,6 +27,14 @@ Local verification emails are captured by Mailpit:
 http://localhost:8025
 ```
 
+Verification links use the local Angular frontend by default:
+
+```text
+http://localhost:4200
+```
+
+Override it with `FRONTEND_BASE_URL` when needed.
+
 Run the application:
 
 ```bash
