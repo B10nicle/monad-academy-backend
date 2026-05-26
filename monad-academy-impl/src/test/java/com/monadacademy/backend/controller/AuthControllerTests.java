@@ -13,7 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,6 +28,7 @@ import com.monadacademy.backend.entity.User;
 import com.monadacademy.backend.repository.AuditLogRepository;
 import com.monadacademy.backend.repository.EmailVerificationTokenRepository;
 import com.monadacademy.backend.repository.UserRepository;
+import com.monadacademy.backend.service.email.EmailSender;
 import com.monadacademy.backend.service.email.EmailVerificationTokenService;
 
 import tools.jackson.core.type.TypeReference;
@@ -254,5 +258,21 @@ class AuthControllerTests extends AbstractPostgresTest {
 		var user = new User(email, username, passwordEncoder.encode("password"));
 		user.activate();
 		return userRepository.save(user);
+	}
+
+	/**
+	 * Replaces SMTP delivery in controller tests while keeping token creation covered.
+	 *
+	 * @author Monad Academy Agent
+	 */
+	@TestConfiguration
+	static class EmailSenderTestConfiguration {
+
+		@Bean
+		@Primary
+		EmailSender emailSender() {
+			return (email, verificationLink) -> {
+			};
+		}
 	}
 }
