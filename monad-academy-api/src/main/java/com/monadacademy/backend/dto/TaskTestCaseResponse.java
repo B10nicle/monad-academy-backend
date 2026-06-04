@@ -1,7 +1,5 @@
 package com.monadacademy.backend.dto;
 
-import java.time.Instant;
-
 /**
  * Represents validation test case data returned by task APIs.
  *
@@ -14,5 +12,5 @@ public record TaskTestCaseResponse(
 		String expectedOutput,
 		boolean hidden,
 		int orderIndex,
-		Instant createdAt) {
+		String createdAt) {
 }
