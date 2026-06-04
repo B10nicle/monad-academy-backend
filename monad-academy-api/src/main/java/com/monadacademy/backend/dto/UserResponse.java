@@ -1,7 +1,5 @@
 package com.monadacademy.backend.dto;
 
-import java.util.UUID;
-
 import com.monadacademy.backend.entity.UserRole;
 import com.monadacademy.backend.entity.UserStatus;
 
@@ -11,7 +9,7 @@ import com.monadacademy.backend.entity.UserStatus;
  * @author Monad Academy Agent
  */
 public record UserResponse(
-		UUID id,
+		Long id,
 		String email,
 		String username,
 		UserRole role,

@@ -1,7 +1,6 @@
 package com.monadacademy.backend.repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,7 @@ import com.monadacademy.backend.entity.UserTaskProgressStatus;
  *
  * @author Monad Academy Agent
  */
-public interface UserTaskProgressRepository extends JpaRepository<UserTaskProgress, UUID> {
+public interface UserTaskProgressRepository extends JpaRepository<UserTaskProgress, Long> {
 
 	long countByUserAndStatus(User user, UserTaskProgressStatus status);
 

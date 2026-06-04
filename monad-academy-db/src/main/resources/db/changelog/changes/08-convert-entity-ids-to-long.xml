@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="08-convert-entity-ids-to-long" author="monad-academy-agent">
+		<sql splitStatements="false"><![CDATA[
+			alter table monad_academy.email_verification_tokens drop constraint if exists fk_email_verification_tokens_user;
+			alter table monad_academy.audit_logs drop constraint if exists fk_audit_logs_user;
+			alter table monad_academy.task_test_cases drop constraint if exists fk_task_test_cases_task;
+			alter table monad_academy.submissions drop constraint if exists fk_submissions_user;
+			alter table monad_academy.submissions drop constraint if exists fk_submissions_task;
+			alter table monad_academy.user_task_progress drop constraint if exists fk_user_task_progress_user;
+			alter table monad_academy.user_task_progress drop constraint if exists fk_user_task_progress_task;
+			alter table monad_academy.user_task_progress drop constraint if exists uk_user_task_progress_user_task;
+
+			drop index if exists monad_academy.idx_email_verification_tokens_user_id;
+			drop index if exists monad_academy.idx_audit_logs_user_id;
+			drop index if exists monad_academy.idx_task_test_cases_task_id;
+			drop index if exists monad_academy.idx_task_test_cases_task_order;
+			drop index if exists monad_academy.idx_submissions_user_id;
+			drop index if exists monad_academy.idx_submissions_task_id;
+			drop index if exists monad_academy.idx_submissions_user_task_created_at;
+			drop index if exists monad_academy.idx_user_task_progress_user_id;
+			drop index if exists monad_academy.idx_user_task_progress_task_id;
+
+			alter table monad_academy.email_verification_tokens drop constraint if exists email_verification_tokens_pkey;
+			alter table monad_academy.audit_logs drop constraint if exists audit_logs_pkey;
+			alter table monad_academy.task_test_cases drop constraint if exists task_test_cases_pkey;
+			alter table monad_academy.submissions drop constraint if exists submissions_pkey;
+			alter table monad_academy.user_task_progress drop constraint if exists user_task_progress_pkey;
+			alter table monad_academy.users drop constraint if exists users_pkey;
+			alter table monad_academy.tasks drop constraint if exists tasks_pkey;
+
+			alter table monad_academy.users add column id_long bigint;
+			alter table monad_academy.tasks add column id_long bigint;
+			alter table monad_academy.email_verification_tokens add column id_long bigint;
+			alter table monad_academy.audit_logs add column id_long bigint;
+			alter table monad_academy.task_test_cases add column id_long bigint;
+			alter table monad_academy.submissions add column id_long bigint;
+			alter table monad_academy.user_task_progress add column id_long bigint;
+
+			with numbered as (
+				select id, row_number() over (order by created_at, id)::bigint as new_id
+				from monad_academy.users
+			)
+			update monad_academy.users target
+			set id_long = numbered.new_id
+			from numbered
+			where target.id = numbered.id;
+
+			with numbered as (
+				select id, row_number() over (order by created_at, id)::bigint as new_id
+				from monad_academy.tasks
+			)
+			update monad_academy.tasks target
+			set id_long = numbered.new_id
+			from numbered
+			where target.id = numbered.id;
+
+			with numbered as (
+				select id, row_number() over (order by created_at, id)::bigint as new_id
+				from monad_academy.email_verification_tokens
+			)
+			update monad_academy.email_verification_tokens target
+			set id_long = numbered.new_id
+			from numbered
+			where target.id = numbered.id;
+
+			with numbered as (
+				select id, row_number() over (order by created_at, id)::bigint as new_id
+				from monad_academy.audit_logs
+			)
+			update monad_academy.audit_logs target
+			set id_long = numbered.new_id
+			from numbered
+			where target.id = numbered.id;
+
+			with numbered as (
+				select id, row_number() over (order by created_at, id)::bigint as new_id
+				from monad_academy.task_test_cases
+			)
+			update monad_academy.task_test_cases target
+			set id_long = numbered.new_id
+			from numbered
+			where target.id = numbered.id;
+
+			with numbered as (
+				select id, row_number() over (order by created_at, id)::bigint as new_id
+				from monad_academy.submissions
+			)
+			update monad_academy.submissions target
+			set id_long = numbered.new_id
+			from numbered
+			where target.id = numbered.id;
+
+			with numbered as (
+				select id, row_number() over (order by created_at, id)::bigint as new_id
+				from monad_academy.user_task_progress
+			)
+			update monad_academy.user_task_progress target
+			set id_long = numbered.new_id
+			from numbered
+			where target.id = numbered.id;
+
+			alter table monad_academy.email_verification_tokens add column user_id_long bigint;
+			alter table monad_academy.audit_logs add column user_id_long bigint;
+			alter table monad_academy.task_test_cases add column task_id_long bigint;
+			alter table monad_academy.submissions add column user_id_long bigint;
+			alter table monad_academy.submissions add column task_id_long bigint;
+			alter table monad_academy.user_task_progress add column user_id_long bigint;
+			alter table monad_academy.user_task_progress add column task_id_long bigint;
+
+			update monad_academy.email_verification_tokens target
+			set user_id_long = users.id_long
+			from monad_academy.users
+			where target.user_id = users.id;
+
+			update monad_academy.audit_logs target
+			set user_id_long = users.id_long
+			from monad_academy.users
+			where target.user_id = users.id;
+
+			update monad_academy.task_test_cases target
+			set task_id_long = tasks.id_long
+			from monad_academy.tasks
+			where target.task_id = tasks.id;
+
+			update monad_academy.submissions target
+			set user_id_long = users.id_long
+			from monad_academy.users
+			where target.user_id = users.id;
+
+			update monad_academy.submissions target
+			set task_id_long = tasks.id_long
+			from monad_academy.tasks
+			where target.task_id = tasks.id;
+
+			update monad_academy.user_task_progress target
+			set user_id_long = users.id_long
+			from monad_academy.users
+			where target.user_id = users.id;
+
+			update monad_academy.user_task_progress target
+			set task_id_long = tasks.id_long
+			from monad_academy.tasks
+			where target.task_id = tasks.id;
+
+			alter table monad_academy.email_verification_tokens drop column user_id;
+			alter table monad_academy.audit_logs drop column user_id;
+			alter table monad_academy.task_test_cases drop column task_id;
+			alter table monad_academy.submissions drop column user_id;
+			alter table monad_academy.submissions drop column task_id;
+			alter table monad_academy.user_task_progress drop column user_id;
+			alter table monad_academy.user_task_progress drop column task_id;
+
+			alter table monad_academy.users drop column id;
+			alter table monad_academy.tasks drop column id;
+			alter table monad_academy.email_verification_tokens drop column id;
+			alter table monad_academy.audit_logs drop column id;
+			alter table monad_academy.task_test_cases drop column id;
+			alter table monad_academy.submissions drop column id;
+			alter table monad_academy.user_task_progress drop column id;
+
+			alter table monad_academy.users rename column id_long to id;
+			alter table monad_academy.tasks rename column id_long to id;
+			alter table monad_academy.email_verification_tokens rename column id_long to id;
+			alter table monad_academy.audit_logs rename column id_long to id;
+			alter table monad_academy.task_test_cases rename column id_long to id;
+			alter table monad_academy.submissions rename column id_long to id;
+			alter table monad_academy.user_task_progress rename column id_long to id;
+
+			alter table monad_academy.email_verification_tokens rename column user_id_long to user_id;
+			alter table monad_academy.audit_logs rename column user_id_long to user_id;
+			alter table monad_academy.task_test_cases rename column task_id_long to task_id;
+			alter table monad_academy.submissions rename column user_id_long to user_id;
+			alter table monad_academy.submissions rename column task_id_long to task_id;
+			alter table monad_academy.user_task_progress rename column user_id_long to user_id;
+			alter table monad_academy.user_task_progress rename column task_id_long to task_id;
+
+			alter table monad_academy.users alter column id set not null;
+			alter table monad_academy.tasks alter column id set not null;
+			alter table monad_academy.email_verification_tokens alter column id set not null;
+			alter table monad_academy.email_verification_tokens alter column user_id set not null;
+			alter table monad_academy.audit_logs alter column id set not null;
+			alter table monad_academy.task_test_cases alter column id set not null;
+			alter table monad_academy.task_test_cases alter column task_id set not null;
+			alter table monad_academy.submissions alter column id set not null;
+			alter table monad_academy.submissions alter column user_id set not null;
+			alter table monad_academy.submissions alter column task_id set not null;
+			alter table monad_academy.user_task_progress alter column id set not null;
+			alter table monad_academy.user_task_progress alter column user_id set not null;
+			alter table monad_academy.user_task_progress alter column task_id set not null;
+
+			alter table monad_academy.users alter column id add generated by default as identity;
+			alter table monad_academy.tasks alter column id add generated by default as identity;
+			alter table monad_academy.email_verification_tokens alter column id add generated by default as identity;
+			alter table monad_academy.audit_logs alter column id add generated by default as identity;
+			alter table monad_academy.task_test_cases alter column id add generated by default as identity;
+			alter table monad_academy.submissions alter column id add generated by default as identity;
+			alter table monad_academy.user_task_progress alter column id add generated by default as identity;
+
+			alter table monad_academy.users add constraint users_pkey primary key (id);
+			alter table monad_academy.tasks add constraint tasks_pkey primary key (id);
+			alter table monad_academy.email_verification_tokens add constraint email_verification_tokens_pkey primary key (id);
+			alter table monad_academy.audit_logs add constraint audit_logs_pkey primary key (id);
+			alter table monad_academy.task_test_cases add constraint task_test_cases_pkey primary key (id);
+			alter table monad_academy.submissions add constraint submissions_pkey primary key (id);
+			alter table monad_academy.user_task_progress add constraint user_task_progress_pkey primary key (id);
+
+			alter table monad_academy.email_verification_tokens
+				add constraint fk_email_verification_tokens_user foreign key (user_id)
+				references monad_academy.users (id) on delete cascade;
+			alter table monad_academy.audit_logs
+				add constraint fk_audit_logs_user foreign key (user_id)
+				references monad_academy.users (id) on delete set null;
+			alter table monad_academy.task_test_cases
+				add constraint fk_task_test_cases_task foreign key (task_id)
+				references monad_academy.tasks (id) on delete cascade;
+			alter table monad_academy.submissions
+				add constraint fk_submissions_user foreign key (user_id)
+				references monad_academy.users (id) on delete cascade;
+			alter table monad_academy.submissions
+				add constraint fk_submissions_task foreign key (task_id)
+				references monad_academy.tasks (id) on delete cascade;
+			alter table monad_academy.user_task_progress
+				add constraint fk_user_task_progress_user foreign key (user_id)
+				references monad_academy.users (id) on delete cascade;
+			alter table monad_academy.user_task_progress
+				add constraint fk_user_task_progress_task foreign key (task_id)
+				references monad_academy.tasks (id) on delete cascade;
+
+			alter table monad_academy.user_task_progress
+				add constraint uk_user_task_progress_user_task unique (user_id, task_id);
+
+			create index idx_email_verification_tokens_user_id on monad_academy.email_verification_tokens (user_id);
+			create index idx_audit_logs_user_id on monad_academy.audit_logs (user_id);
+			create index idx_task_test_cases_task_id on monad_academy.task_test_cases (task_id);
+			create index idx_task_test_cases_task_order on monad_academy.task_test_cases (task_id, order_index);
+			create index idx_submissions_user_id on monad_academy.submissions (user_id);
+			create index idx_submissions_task_id on monad_academy.submissions (task_id);
+			create index idx_submissions_user_task_created_at on monad_academy.submissions (user_id, task_id, created_at);
+			create index idx_user_task_progress_user_id on monad_academy.user_task_progress (user_id);
+			create index idx_user_task_progress_task_id on monad_academy.user_task_progress (task_id);
+
+			select setval(pg_get_serial_sequence('monad_academy.users', 'id'), coalesce(max(id), 1), max(id) is not null) from monad_academy.users;
+			select setval(pg_get_serial_sequence('monad_academy.tasks', 'id'), coalesce(max(id), 1), max(id) is not null) from monad_academy.tasks;
+			select setval(pg_get_serial_sequence('monad_academy.email_verification_tokens', 'id'), coalesce(max(id), 1), max(id) is not null) from monad_academy.email_verification_tokens;
+			select setval(pg_get_serial_sequence('monad_academy.audit_logs', 'id'), coalesce(max(id), 1), max(id) is not null) from monad_academy.audit_logs;
+			select setval(pg_get_serial_sequence('monad_academy.task_test_cases', 'id'), coalesce(max(id), 1), max(id) is not null) from monad_academy.task_test_cases;
+			select setval(pg_get_serial_sequence('monad_academy.submissions', 'id'), coalesce(max(id), 1), max(id) is not null) from monad_academy.submissions;
+			select setval(pg_get_serial_sequence('monad_academy.user_task_progress', 'id'), coalesce(max(id), 1), max(id) is not null) from monad_academy.user_task_progress;
+		]]></sql>
+	</changeSet>
+</databaseChangeLog>

@@ -1,12 +1,13 @@
 package com.monadacademy.backend.entity;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -28,7 +29,8 @@ import lombok.NoArgsConstructor;
 public class User {
 
 	@Id
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable = false, unique = true, length = 320)
 	private String email;
@@ -62,7 +64,6 @@ public class User {
 	}
 
 	public User(String email, String username, String passwordHash, UserRole role) {
-		this.id = UUID.randomUUID();
 		this.email = email;
 		this.username = username;
 		this.passwordHash = passwordHash;

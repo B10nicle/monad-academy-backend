@@ -1,7 +1,6 @@
 package com.monadacademy.backend.repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,7 +11,7 @@ import com.monadacademy.backend.entity.User;
  *
  * @author Monad Academy Agent
  */
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 	boolean existsByEmailIgnoreCase(String email);
 

@@ -1,12 +1,13 @@
 package com.monadacademy.backend.entity;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -28,7 +29,8 @@ import lombok.NoArgsConstructor;
 public class Task {
 
 	@Id
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable = false, length = 160)
 	private String title;
@@ -72,7 +74,6 @@ public class Task {
 			TaskStatus status,
 			String initialCode,
 			String solutionTemplate) {
-		this.id = UUID.randomUUID();
 		this.title = title;
 		this.slug = slug;
 		this.description = description;

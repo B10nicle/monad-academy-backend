@@ -1,7 +1,5 @@
 package com.monadacademy.backend.controller;
 
-import java.util.UUID;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +27,8 @@ public class AdminSubmissionController {
 
 	@GetMapping("/submissions")
 	PageResponse<SubmissionResponse> listSubmissions(
-			@RequestParam(required = false) UUID userId,
-			@RequestParam(required = false) UUID taskId,
+			@RequestParam(required = false) Long userId,
+			@RequestParam(required = false) Long taskId,
 			@RequestParam(required = false) SubmissionStatus status,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "20") int size) {
@@ -39,8 +37,8 @@ public class AdminSubmissionController {
 
 	@GetMapping("/users/{userId}/submissions")
 	PageResponse<SubmissionResponse> listUserSubmissions(
-			@PathVariable UUID userId,
-			@RequestParam(required = false) UUID taskId,
+			@PathVariable Long userId,
+			@RequestParam(required = false) Long taskId,
 			@RequestParam(required = false) SubmissionStatus status,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "20") int size) {

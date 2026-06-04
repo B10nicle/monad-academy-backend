@@ -1,7 +1,6 @@
 package com.monadacademy.backend.dto;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import com.monadacademy.backend.entity.SubmissionStatus;
 
@@ -11,9 +10,9 @@ import com.monadacademy.backend.entity.SubmissionStatus;
  * @author Monad Academy Agent
  */
 public record SubmissionResponse(
-		UUID id,
-		UUID userId,
-		UUID taskId,
+		Long id,
+		Long userId,
+		Long taskId,
 		String sourceCode,
 		SubmissionStatus status,
 		String executionMetadata,

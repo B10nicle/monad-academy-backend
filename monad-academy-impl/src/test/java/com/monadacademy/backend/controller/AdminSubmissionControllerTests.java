@@ -4,8 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,7 +130,7 @@ class AdminSubmissionControllerTests extends AbstractPostgresTest {
 
 	@Test
 	void testListUserSubmissionsWhenUserDoesNotExistShouldReturnNotFound() throws Exception {
-		mockMvc.perform(get("/api/admin/users/{userId}/submissions", UUID.randomUUID())
+		mockMvc.perform(get("/api/admin/users/{userId}/submissions", 999999L)
 						.header("Authorization", "Bearer " + token(createActiveAdmin())))
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.code").value("USER_NOT_FOUND"));

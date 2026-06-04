@@ -2,7 +2,6 @@ package com.monadacademy.backend.dto;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
 import com.monadacademy.backend.entity.TaskDifficulty;
 import com.monadacademy.backend.entity.TaskStatus;
@@ -14,7 +13,7 @@ import com.monadacademy.backend.entity.TaskTopic;
  * @author Monad Academy Agent
  */
 public record TaskResponse(
-		UUID id,
+		Long id,
 		String title,
 		String slug,
 		String description,

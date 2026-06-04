@@ -1,7 +1,5 @@
 package com.monadacademy.backend.dto;
 
-import java.util.UUID;
-
 import com.monadacademy.backend.entity.TaskDifficulty;
 import com.monadacademy.backend.entity.TaskTopic;
 
@@ -11,7 +9,7 @@ import com.monadacademy.backend.entity.TaskTopic;
  * @author Monad Academy Agent
  */
 public record PublicTaskSummaryResponse(
-		UUID id,
+		Long id,
 		String title,
 		String slug,
 		TaskDifficulty difficulty,
