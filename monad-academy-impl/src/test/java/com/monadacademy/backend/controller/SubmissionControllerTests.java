@@ -112,7 +112,7 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 				.andExpect(jsonPath("$.sourceCode").value(sourceCode("return input.toUpperCase();")))
 				.andExpect(jsonPath("$.status").value("ACCEPTED"))
 				.andExpect(jsonPath("$.executionMetadata").value("{\"status\":\"ACCEPTED\"}"))
-				.andExpect(jsonPath("$.executionDurationMs").value(42));
+				.andExpect(jsonPath("$.executionDurationMs").value(37));
 
 		var submission = submissionRepository.findAll().getFirst();
 		var progress = progressRepository.findByUserAndTask(user, task).orElseThrow();
@@ -240,7 +240,7 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 		@Override
 		public JavaCodeRunResult run(JavaCodeRunRequest request) {
 			this.lastRequest = request;
-			return new JavaCodeRunResult(SubmissionStatus.ACCEPTED, "", "", "{\"status\":\"ACCEPTED\"}", 42);
+			return new JavaCodeRunResult(SubmissionStatus.ACCEPTED, "", "", "{\"status\":\"ACCEPTED\"}", 3734);
 		}
 
 		JavaCodeRunRequest lastRequest() {

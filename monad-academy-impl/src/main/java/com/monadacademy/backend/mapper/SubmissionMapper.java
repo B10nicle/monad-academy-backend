@@ -11,10 +11,13 @@ import com.monadacademy.backend.entity.Submission;
  *
  * @author Monad Academy Agent
  */
-@Mapper
+@Mapper(uses = ResponseFormatMapper.class)
 public interface SubmissionMapper {
 
 	@Mapping(target = "userId", source = "user.id")
 	@Mapping(target = "taskId", source = "task.id")
+	@Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "formatInstant")
+	@Mapping(target = "updatedAt", source = "updatedAt", qualifiedByName = "formatInstant")
+	@Mapping(target = "executionDurationMs", source = "executionDurationMs", qualifiedByName = "roundDuration")
 	SubmissionResponse toResponse(Submission submission);
 }

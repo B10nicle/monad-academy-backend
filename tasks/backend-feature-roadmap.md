@@ -27,6 +27,7 @@ Legend:
 | feature/docker-sandbox-hardening | [x] | Implemented in feature/docker-sandbox-hardening |
 | feature/entity-long-ids | [x] | Converted entity identifiers from UUID to Long |
 | feature/solution-class-submissions | [x] | Added LeetCode-style Solution class submissions |
+| feature/frontend-response-formatting | [x] | Formatted frontend-facing timestamps and durations |
 
 ---
 
@@ -413,6 +414,32 @@ Dependencies:
 
 ---
 
+## 13. feature/frontend-response-formatting
+
+Status: [x] Completed
+
+Goal:
+
+Normalize API response values for frontend display.
+
+Delivered:
+
+- formatted frontend-facing `createdAt` and `updatedAt` values as `HH:mm:ss yyyy-MM-dd`
+- rounded submission `executionDurationMs` values to two significant digits
+- added shared MapStruct response formatting helper
+- added mapper and submission API tests for formatted values
+
+Notes:
+
+- timestamps are formatted from UTC instants to preserve the previous `Z`-based response time
+- duration formatting keeps the existing numeric `executionDurationMs` contract
+
+Dependencies:
+
+- feature/solution-class-submissions
+
+---
+
 ## Recommended Order
 
 1. feature/auth [x]
@@ -427,3 +454,4 @@ Dependencies:
 10. feature/docker-sandbox-hardening [x]
 11. feature/entity-long-ids [x]
 12. feature/solution-class-submissions [x]
+13. feature/frontend-response-formatting [x]

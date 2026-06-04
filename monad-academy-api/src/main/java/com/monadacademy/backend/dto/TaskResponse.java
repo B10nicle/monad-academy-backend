@@ -1,6 +1,5 @@
 package com.monadacademy.backend.dto;
 
-import java.time.Instant;
 import java.util.List;
 
 import com.monadacademy.backend.entity.TaskDifficulty;
@@ -25,7 +24,7 @@ public record TaskResponse(
 		TaskStatus status,
 		String initialCode,
 		String solutionTemplate,
-		Instant createdAt,
-		Instant updatedAt,
+		String createdAt,
+		String updatedAt,
 		List<TaskTestCaseResponse> testCases) {
 }

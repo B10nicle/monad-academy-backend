@@ -1,7 +1,5 @@
 package com.monadacademy.backend.dto;
 
-import java.time.Instant;
-
 import com.monadacademy.backend.entity.SubmissionStatus;
 
 /**
@@ -17,6 +15,6 @@ public record SubmissionResponse(
 		SubmissionStatus status,
 		String executionMetadata,
 		Long executionDurationMs,
-		Instant createdAt,
-		Instant updatedAt) {
+		String createdAt,
+		String updatedAt) {
 }
