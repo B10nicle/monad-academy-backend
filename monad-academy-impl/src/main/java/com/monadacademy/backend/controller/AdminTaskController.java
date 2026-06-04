@@ -1,7 +1,5 @@
 package com.monadacademy.backend.controller;
 
-import java.util.UUID;
-
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,23 +35,23 @@ public class AdminTaskController {
 	}
 
 	@PutMapping("/{id}")
-	TaskResponse updateTask(@PathVariable UUID id, @Valid @RequestBody TaskRequest request) {
+	TaskResponse updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequest request) {
 		return adminTaskService.updateTask(id, request);
 	}
 
 	@PostMapping("/{id}/publish")
-	TaskResponse publishTask(@PathVariable UUID id) {
+	TaskResponse publishTask(@PathVariable Long id) {
 		return adminTaskService.publishTask(id);
 	}
 
 	@PostMapping("/{id}/archive")
-	TaskResponse archiveTask(@PathVariable UUID id) {
+	TaskResponse archiveTask(@PathVariable Long id) {
 		return adminTaskService.archiveTask(id);
 	}
 
 	@PostMapping("/{id}/test-cases")
 	TaskTestCaseResponse addTestCase(
-			@PathVariable UUID id,
+			@PathVariable Long id,
 			@Valid @RequestBody TaskTestCaseRequest request) {
 		return adminTaskService.addTestCase(id, request);
 	}

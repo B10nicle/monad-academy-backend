@@ -1,7 +1,5 @@
 package com.monadacademy.backend.controller;
 
-import java.util.UUID;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +40,7 @@ public class SubmissionController {
 
 	@GetMapping("/api/tasks/{taskId}/submissions/my")
 	PageResponse<SubmissionResponse> listCurrentUserTaskSubmissions(
-			@PathVariable UUID taskId,
+			@PathVariable Long taskId,
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "20") int size) {
 		return submissionService.listCurrentUserTaskSubmissions(taskId, page, size);

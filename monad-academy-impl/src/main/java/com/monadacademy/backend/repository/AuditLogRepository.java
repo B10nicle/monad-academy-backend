@@ -1,7 +1,5 @@
 package com.monadacademy.backend.repository;
 
-import java.util.UUID;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.monadacademy.backend.entity.AuditLog;
@@ -11,5 +9,5 @@ import com.monadacademy.backend.entity.AuditLog;
  *
  * @author Monad Academy Agent
  */
-public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
+public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
 }

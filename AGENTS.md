@@ -104,6 +104,7 @@ Important decisions:
 - Email verification stores only SHA-256 token hashes.
 - Raw email verification tokens are sent only through `EmailSender`.
 - Email delivery is handled by `EmailSender` through SMTP.
+- JPA entity identifiers and API identifiers use generated `Long` values, not UUID values.
 - JSON support uses Spring Boot Jackson 3 packages under `tools.jackson`.
 - Lombok is used for constructors, getters, and JPA no-args constructors where it removes boilerplate.
 - MapStruct is used for DTO mapping; mapper implementations should be generated, not handwritten.

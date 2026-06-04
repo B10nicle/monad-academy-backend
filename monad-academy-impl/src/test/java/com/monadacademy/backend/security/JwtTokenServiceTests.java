@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.monadacademy.backend.config.AppProperties;
 import com.monadacademy.backend.entity.User;
@@ -40,7 +41,7 @@ class JwtTokenServiceTests {
 
 	@Test
 	void testCreateTokenWhenTokenIsValidShouldCreateDecodableJwt() {
-		var user = new User("user@example.com", "b10nicle", "password-hash");
+		var user = user();
 		var token = jwtTokenService.createToken(user);
 
 		var jwt = jwtDecoder.decode(token);
@@ -51,7 +52,7 @@ class JwtTokenServiceTests {
 
 	@Test
 	void testDecodeWhenTokenIsTamperedShouldThrowException() {
-		var user = new User("user@example.com", "b10nicle", "password-hash");
+		var user = user();
 		var token = jwtTokenService.createToken(user);
 		var tamperedToken = token.substring(0, token.length() - 2) + "aa";
 
@@ -61,5 +62,11 @@ class JwtTokenServiceTests {
 
 	private SecretKeySpec jwtSecret() {
 		return new SecretKeySpec(JWT_SECRET.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+	}
+
+	private User user() {
+		var user = new User("user@example.com", "b10nicle", "password-hash");
+		ReflectionTestUtils.setField(user, "id", 1L);
+		return user;
 	}
 }

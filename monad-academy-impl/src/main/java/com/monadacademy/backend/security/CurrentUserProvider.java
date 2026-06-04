@@ -1,7 +1,5 @@
 package com.monadacademy.backend.security;
 
-import java.util.UUID;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
@@ -25,7 +23,7 @@ public class CurrentUserProvider {
 			log.debug("No JWT principal found in security context");
 			return null;
 		}
-		var currentUser = new CurrentUser(UUID.fromString(jwt.getSubject()), UserRole.valueOf(jwt.getClaimAsString("role")));
+		var currentUser = new CurrentUser(Long.valueOf(jwt.getSubject()), UserRole.valueOf(jwt.getClaimAsString("role")));
 		log.debug("Resolved current user id={} role={}", currentUser.id(), currentUser.role());
 		return currentUser;
 	}

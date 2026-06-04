@@ -25,6 +25,7 @@ Legend:
 | feature/progress | [x] | Implemented in feature/progress |
 | feature/admin-submissions | [x] | Implemented in feature/admin-submissions |
 | feature/docker-sandbox-hardening | [x] | Implemented in feature/docker-sandbox-hardening |
+| feature/entity-long-ids | [x] | Converted entity identifiers from UUID to Long |
 
 ---
 
@@ -352,6 +353,34 @@ Dependencies:
 
 ---
 
+## 11. feature/entity-long-ids
+
+Status: [x] Completed
+
+Goal:
+
+Use database-generated numeric identifiers for persisted entities and API contracts.
+
+Delivered:
+
+- converted JPA entity ids from `UUID` to generated `Long`
+- converted API DTO ids, request ids, controller path variables, service parameters, and repository id types to `Long`
+- updated JWT subject parsing to resolve authenticated users by `Long` id
+- added Liquibase migration `08-convert-entity-ids-to-long.xml` to convert primary keys and foreign keys to `bigint identity`
+- preserved existing foreign-key behavior and indexes after id conversion
+- updated tests for generated database ids
+
+Notes:
+
+- Docker runner container names still use UUID values; this is not a persisted entity identifier.
+- the id conversion changes public API id shapes from UUID strings to numeric values and requires frontend compatibility updates
+
+Dependencies:
+
+- feature/docker-sandbox-hardening
+
+---
+
 ## Recommended Order
 
 1. feature/auth [x]
@@ -364,3 +393,4 @@ Dependencies:
 8. feature/progress [x]
 9. feature/admin-submissions [x]
 10. feature/docker-sandbox-hardening [x]
+11. feature/entity-long-ids [x]

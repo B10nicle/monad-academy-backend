@@ -1,7 +1,5 @@
 package com.monadacademy.backend.service.submission;
 
-import java.util.UUID;
-
 import jakarta.persistence.criteria.Predicate;
 
 import org.springframework.data.domain.Page;
@@ -94,7 +92,7 @@ public class SubmissionService {
 	}
 
 	@Transactional(readOnly = true)
-	public PageResponse<SubmissionResponse> listCurrentUserTaskSubmissions(UUID taskId, int page, int size) {
+	public PageResponse<SubmissionResponse> listCurrentUserTaskSubmissions(Long taskId, int page, int size) {
 		var user = currentUser();
 		var task = findPublishedTask(taskId);
 		var pageable = pageable(page, size);
@@ -109,8 +107,8 @@ public class SubmissionService {
 
 	@Transactional(readOnly = true)
 	public PageResponse<SubmissionResponse> listAdminSubmissions(
-			UUID userId,
-			UUID taskId,
+			Long userId,
+			Long taskId,
 			SubmissionStatus status,
 			int page,
 			int size) {
@@ -123,8 +121,8 @@ public class SubmissionService {
 
 	@Transactional(readOnly = true)
 	public PageResponse<SubmissionResponse> listAdminUserSubmissions(
-			UUID userId,
-			UUID taskId,
+			Long userId,
+			Long taskId,
 			SubmissionStatus status,
 			int page,
 			int size) {
@@ -147,12 +145,12 @@ public class SubmissionService {
 				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 	}
 
-	private Task findPublishedTask(UUID taskId) {
+	private Task findPublishedTask(Long taskId) {
 		return taskRepository.findByIdAndStatus(taskId, TaskStatus.PUBLISHED)
 				.orElseThrow(() -> new AppException(ErrorCode.TASK_NOT_FOUND, HttpStatus.NOT_FOUND));
 	}
 
-	private Specification<Submission> adminSubmissionSpec(UUID userId, UUID taskId, SubmissionStatus status) {
+	private Specification<Submission> adminSubmissionSpec(Long userId, Long taskId, SubmissionStatus status) {
 		return (root, query, criteriaBuilder) -> {
 			Predicate predicate = criteriaBuilder.conjunction();
 			if (userId != null) {

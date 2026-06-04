@@ -1,7 +1,6 @@
 package com.monadacademy.backend.repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +14,13 @@ import com.monadacademy.backend.entity.TaskStatus;
  *
  * @author Monad Academy Agent
  */
-public interface TaskRepository extends JpaRepository<Task, UUID> {
+public interface TaskRepository extends JpaRepository<Task, Long> {
 
 	boolean existsBySlug(String slug);
 
 	Optional<Task> findBySlug(String slug);
 
-	Optional<Task> findByIdAndStatus(UUID id, TaskStatus status);
+	Optional<Task> findByIdAndStatus(Long id, TaskStatus status);
 
 	Page<Task> findByStatus(TaskStatus status, Pageable pageable);
 

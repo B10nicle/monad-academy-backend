@@ -1,7 +1,5 @@
 package com.monadacademy.backend.service.task;
 
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +63,7 @@ public class AdminTaskService {
 	}
 
 	@Transactional
-	public TaskResponse updateTask(UUID id, TaskRequest request) {
+	public TaskResponse updateTask(Long id, TaskRequest request) {
 		var task = findTask(id);
 		validateUniqueSlug(request.slug(), task.getId());
 		task.update(
@@ -83,7 +81,7 @@ public class AdminTaskService {
 	}
 
 	@Transactional
-	public TaskResponse publishTask(UUID id) {
+	public TaskResponse publishTask(Long id) {
 		var task = findTask(id);
 		task.publish();
 		auditLogService.log(currentUser(), AuditEventType.TASK_PUBLISHED, metadata(task));
@@ -92,7 +90,7 @@ public class AdminTaskService {
 	}
 
 	@Transactional
-	public TaskResponse archiveTask(UUID id) {
+	public TaskResponse archiveTask(Long id) {
 		var task = findTask(id);
 		task.archive();
 		auditLogService.log(currentUser(), AuditEventType.TASK_ARCHIVED, metadata(task));
@@ -101,7 +99,7 @@ public class AdminTaskService {
 	}
 
 	@Transactional
-	public TaskTestCaseResponse addTestCase(UUID taskId, TaskTestCaseRequest request) {
+	public TaskTestCaseResponse addTestCase(Long taskId, TaskTestCaseRequest request) {
 		var task = findTask(taskId);
 		var testCase = testCaseRepository.save(toTestCase(task, request));
 		auditLogService.log(currentUser(), AuditEventType.TASK_TEST_CASE_CREATED, metadata(task));
@@ -109,7 +107,7 @@ public class AdminTaskService {
 		return taskMapper.toResponse(testCase);
 	}
 
-	private Task findTask(UUID id) {
+	private Task findTask(Long id) {
 		return taskRepository.findById(id)
 				.orElseThrow(() -> new AppException(ErrorCode.TASK_NOT_FOUND, HttpStatus.NOT_FOUND));
 	}
@@ -131,7 +129,7 @@ public class AdminTaskService {
 		return userRepository.findById(currentUser.id()).orElse(null);
 	}
 
-	private void validateUniqueSlug(String slug, UUID currentTaskId) {
+	private void validateUniqueSlug(String slug, Long currentTaskId) {
 		taskRepository.findBySlug(slug)
 				.filter(task -> !task.getId().equals(currentTaskId))
 				.ifPresent(task -> {

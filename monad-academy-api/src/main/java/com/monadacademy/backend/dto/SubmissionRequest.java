@@ -1,7 +1,5 @@
 package com.monadacademy.backend.dto;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public record SubmissionRequest(
 		@NotNull
-		UUID taskId,
+		Long taskId,
 		@NotBlank
 		String sourceCode) {
 }

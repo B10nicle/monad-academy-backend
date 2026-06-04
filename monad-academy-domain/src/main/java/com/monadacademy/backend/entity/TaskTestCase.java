@@ -1,11 +1,12 @@
 package com.monadacademy.backend.entity;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -28,7 +29,8 @@ import lombok.NoArgsConstructor;
 public class TaskTestCase {
 
 	@Id
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "task_id", nullable = false)
@@ -50,7 +52,6 @@ public class TaskTestCase {
 	private Instant createdAt;
 
 	public TaskTestCase(Task task, String input, String expectedOutput, boolean hidden, int orderIndex) {
-		this.id = UUID.randomUUID();
 		this.task = task;
 		this.input = input;
 		this.expectedOutput = expectedOutput;

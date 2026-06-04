@@ -1,7 +1,6 @@
 package com.monadacademy.backend.repository;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,7 +12,7 @@ import com.monadacademy.backend.entity.TaskTestCase;
  *
  * @author Monad Academy Agent
  */
-public interface TaskTestCaseRepository extends JpaRepository<TaskTestCase, UUID> {
+public interface TaskTestCaseRepository extends JpaRepository<TaskTestCase, Long> {
 
 	List<TaskTestCase> findByTaskOrderByOrderIndexAsc(Task task);
 
