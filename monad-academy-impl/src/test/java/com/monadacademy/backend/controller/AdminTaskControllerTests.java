@@ -87,8 +87,31 @@ class AdminTaskControllerTests extends AbstractPostgresTest {
 		var auditEvents = auditLogRepository.findAll().stream()
 				.map(auditLog -> auditLog.getEventType())
 				.toList();
+		assertThat(task.getMethodName()).isEqualTo("mapValues");
+		assertThat(task.getMethodReturnType()).isEqualTo("String");
+		assertThat(task.getMethodParameters()).isEqualTo("String input");
 		assertThat(testCaseRepository.findByTaskOrderByOrderIndexAsc(task)).hasSize(1);
 		assertThat(auditEvents).contains(AuditEventType.TASK_CREATED);
+	}
+
+	@Test
+	void testCreateTaskWhenSignatureCannotBeResolvedShouldReturnBadRequest() throws Exception {
+		mockMvc.perform(post("/api/admin/tasks")
+						.header("Authorization", "Bearer " + token(createActiveAdmin()))
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(taskRequestWithCode("stream-invalid-task", "class Solution {}", "class Solution {}")))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
+	}
+
+	@Test
+	void testCreateTaskWhenExplicitSignatureIsBlankShouldResolveFromCode() throws Exception {
+		mockMvc.perform(post("/api/admin/tasks")
+						.header("Authorization", "Bearer " + token(createActiveAdmin()))
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(taskRequestWithBlankSignature("stream-blank-signature")))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.methodName").value("mapValues"));
 	}
 
 	@Test
@@ -114,6 +137,7 @@ class AdminTaskControllerTests extends AbstractPostgresTest {
 		var updatedTask = taskRepository.findById(task.getId()).orElseThrow();
 		assertThat(updatedTask.getSlug()).isEqualTo("stream-map-usernames");
 		assertThat(updatedTask.getTitle()).isEqualTo("Filter active users");
+		assertThat(updatedTask.getMethodName()).isEqualTo("mapValues");
 	}
 
 	@Test
@@ -198,9 +222,6 @@ class AdminTaskControllerTests extends AbstractPostgresTest {
 				  "title": "Filter active users",
 				  "slug": "%s",
 				  "description": "Use Stream API to filter active users.",
-				  "methodName": "mapValues",
-				  "methodReturnType": "String",
-				  "methodParameters": "String input",
 				  "difficulty": "EASY",
 				  "topic": "STREAM_API",
 				  "status": "%s",
@@ -216,5 +237,40 @@ class AdminTaskControllerTests extends AbstractPostgresTest {
 				  ]
 				}
 				""".formatted(slug, status);
+	}
+
+	private String taskRequestWithCode(String slug, String initialCode, String solutionTemplate) {
+		return """
+				{
+				  "title": "Filter active users",
+				  "slug": "%s",
+				  "description": "Use Stream API to filter active users.",
+				  "difficulty": "EASY",
+				  "topic": "STREAM_API",
+				  "status": "DRAFT",
+				  "initialCode": "%s",
+				  "solutionTemplate": "%s",
+				  "testCases": []
+				}
+				""".formatted(slug, initialCode, solutionTemplate);
+	}
+
+	private String taskRequestWithBlankSignature(String slug) {
+		return """
+				{
+				  "title": "Filter active users",
+				  "slug": "%s",
+				  "description": "Use Stream API to filter active users.",
+				  "methodName": "",
+				  "methodReturnType": "",
+				  "methodParameters": "",
+				  "difficulty": "EASY",
+				  "topic": "STREAM_API",
+				  "status": "DRAFT",
+				  "initialCode": "class Solution { public String mapValues(String input) { return input; } }",
+				  "solutionTemplate": "class Solution { public String mapValues(String input) { return input.trim(); } }",
+				  "testCases": []
+				}
+				""".formatted(slug);
 	}
 }

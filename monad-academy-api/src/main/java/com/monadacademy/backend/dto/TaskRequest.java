@@ -27,14 +27,11 @@ public record TaskRequest(
 		String slug,
 		@NotBlank
 		String description,
-		@NotBlank
 		@Size(max = 64)
-		@Pattern(regexp = "^[A-Za-z_$][A-Za-z0-9_$]*$")
+		@Pattern(regexp = "^\\s*$|^[A-Za-z_$][A-Za-z0-9_$]*$")
 		String methodName,
-		@NotBlank
 		@Size(max = 128)
 		String methodReturnType,
-		@NotBlank
 		@Size(max = 500)
 		String methodParameters,
 		@NotNull
