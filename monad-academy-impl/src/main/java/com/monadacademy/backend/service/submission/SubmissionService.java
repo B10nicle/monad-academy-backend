@@ -68,6 +68,7 @@ public class SubmissionService {
 		submission.markRunning();
 		var runResult = javaCodeRunner.run(new JavaCodeRunRequest(
 				request.sourceCode(),
+				task.getMethodName(),
 				testCaseRepository.findByTaskOrderByOrderIndexAsc(task).stream()
 						.map(testCase -> new JavaCodeRunnerTestCase(testCase.getInput(), testCase.getExpectedOutput()))
 						.toList()));

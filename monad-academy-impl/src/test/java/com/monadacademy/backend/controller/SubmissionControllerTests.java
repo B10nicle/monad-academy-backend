@@ -91,7 +91,7 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 
 		mockMvc.perform(post("/api/submissions")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(submissionRequest(task.getId().toString(), "return input;")))
+						.content(submissionRequest(task.getId().toString(), sourceCode("return input;"))))
 				.andExpect(status().isUnauthorized());
 	}
 
@@ -105,11 +105,11 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 		mockMvc.perform(post("/api/submissions")
 						.header("Authorization", "Bearer " + token(user))
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(submissionRequest(task.getId().toString(), "return input.toUpperCase();")))
+						.content(submissionRequest(task.getId().toString(), sourceCode("return input.toUpperCase();"))))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.taskId").value(task.getId().toString()))
 				.andExpect(jsonPath("$.userId").value(user.getId().toString()))
-				.andExpect(jsonPath("$.sourceCode").value("return input.toUpperCase();"))
+				.andExpect(jsonPath("$.sourceCode").value(sourceCode("return input.toUpperCase();")))
 				.andExpect(jsonPath("$.status").value("ACCEPTED"))
 				.andExpect(jsonPath("$.executionMetadata").value("{\"status\":\"ACCEPTED\"}"))
 				.andExpect(jsonPath("$.executionDurationMs").value(42));
@@ -119,7 +119,8 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 		assertThat(submission.getStatus()).isEqualTo(SubmissionStatus.ACCEPTED);
 		assertThat(progress.getAttemptsCount()).isEqualTo(1);
 		assertThat(progress.getSolvedAt()).isNotNull();
-		assertThat(javaCodeRunner.lastRequest().sourceCode()).isEqualTo("return input.toUpperCase();");
+		assertThat(javaCodeRunner.lastRequest().sourceCode()).isEqualTo(sourceCode("return input.toUpperCase();"));
+		assertThat(javaCodeRunner.lastRequest().methodName()).isEqualTo("mapValues");
 		assertThat(javaCodeRunner.lastRequest().testCases()).hasSize(2);
 	}
 
@@ -131,7 +132,7 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 		mockMvc.perform(post("/api/submissions")
 						.header("Authorization", "Bearer " + token(user))
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(submissionRequest(task.getId().toString(), "return input;")))
+						.content(submissionRequest(task.getId().toString(), sourceCode("return input;"))))
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.code").value("TASK_NOT_FOUND"));
 	}
@@ -189,11 +190,14 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 				"Map values",
 				slug,
 				"Use Stream API to map values.",
+				"mapValues",
+				"String",
+				"String input",
 				TaskDifficulty.EASY,
 				TaskTopic.STREAM_API,
 				status,
-				"return values.stream();",
-				"return values.stream().map(String::toUpperCase).toList();");
+				"class Solution { public String mapValues(String input) { return input; } }",
+				"class Solution { public String mapValues(String input) { return input.toUpperCase(); } }");
 	}
 
 	private String submissionRequest(String taskId, String sourceCode) {
@@ -203,6 +207,10 @@ class SubmissionControllerTests extends AbstractPostgresTest {
 				  "sourceCode": "%s"
 				}
 				""".formatted(taskId, sourceCode);
+	}
+
+	private String sourceCode(String body) {
+		return "class Solution { public String mapValues(String input) { %s } }".formatted(body);
 	}
 
 	/**

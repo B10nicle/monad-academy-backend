@@ -41,6 +41,15 @@ public class Task {
 	@Column(nullable = false, columnDefinition = "text")
 	private String description;
 
+	@Column(nullable = false, length = 64)
+	private String methodName;
+
+	@Column(nullable = false, length = 128)
+	private String methodReturnType;
+
+	@Column(nullable = false, length = 500)
+	private String methodParameters;
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 32)
 	private TaskDifficulty difficulty;
@@ -69,6 +78,9 @@ public class Task {
 			String title,
 			String slug,
 			String description,
+			String methodName,
+			String methodReturnType,
+			String methodParameters,
 			TaskDifficulty difficulty,
 			TaskTopic topic,
 			TaskStatus status,
@@ -77,6 +89,9 @@ public class Task {
 		this.title = title;
 		this.slug = slug;
 		this.description = description;
+		this.methodName = methodName;
+		this.methodReturnType = methodReturnType;
+		this.methodParameters = methodParameters;
 		this.difficulty = difficulty;
 		this.topic = topic;
 		this.status = status;
@@ -100,6 +115,9 @@ public class Task {
 			String title,
 			String slug,
 			String description,
+			String methodName,
+			String methodReturnType,
+			String methodParameters,
 			TaskDifficulty difficulty,
 			TaskTopic topic,
 			TaskStatus status,
@@ -108,6 +126,9 @@ public class Task {
 		this.title = title;
 		this.slug = slug;
 		this.description = description;
+		this.methodName = methodName;
+		this.methodReturnType = methodReturnType;
+		this.methodParameters = methodParameters;
 		this.difficulty = difficulty;
 		this.topic = topic;
 		this.status = status;

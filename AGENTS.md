@@ -109,6 +109,7 @@ Important decisions:
 - Lombok is used for constructors, getters, and JPA no-args constructors where it removes boilerplate.
 - MapStruct is used for DTO mapping; mapper implementations should be generated, not handwritten.
 - MapStruct Spring component model is configured through Maven compiler args.
+- Coding submissions use a LeetCode-style `class Solution` contract. Tasks define `methodName`, `methodReturnType`, and `methodParameters`; runner test case inputs are Java argument expressions passed to that method.
 
 ---
 

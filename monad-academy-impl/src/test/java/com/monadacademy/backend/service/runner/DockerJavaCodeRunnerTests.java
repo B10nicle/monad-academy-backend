@@ -107,8 +107,15 @@ class DockerJavaCodeRunnerTests {
 
 	private JavaCodeRunRequest request() {
 		return new JavaCodeRunRequest(
-				"return input;",
-				List.of(new JavaCodeRunnerTestCase("value", "value")));
+				"""
+						class Solution {
+						    public String echo(String input) {
+						        return input;
+						    }
+						}
+						""",
+				"echo",
+				List.of(new JavaCodeRunnerTestCase("\"value\"", "value")));
 	}
 
 	private static class FakeCommandExecutor implements CommandExecutor {

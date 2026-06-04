@@ -49,12 +49,12 @@ class SubmissionRepositoryTests extends AbstractPostgresTest {
 		var user = userRepository.save(new User("user@example.com", "user", "hash"));
 		var task = taskRepository.save(createTask("stream-filter-users"));
 
-		var submission = submissionRepository.save(new Submission(user, task, "return users.stream();"));
+		var submission = submissionRepository.save(new Submission(user, task, "class Solution { public String mapValues(String input) { return input; } }"));
 
 		var foundSubmission = submissionRepository.findById(submission.getId()).orElseThrow();
 		assertThat(foundSubmission.getUser().getId()).isEqualTo(user.getId());
 		assertThat(foundSubmission.getTask().getId()).isEqualTo(task.getId());
-		assertThat(foundSubmission.getSourceCode()).isEqualTo("return users.stream();");
+		assertThat(foundSubmission.getSourceCode()).isEqualTo("class Solution { public String mapValues(String input) { return input; } }");
 		assertThat(foundSubmission.getStatus()).isEqualTo(SubmissionStatus.PENDING);
 		assertThat(foundSubmission.getExecutionMetadata()).isNull();
 		assertThat(foundSubmission.getExecutionDurationMs()).isNull();
@@ -66,7 +66,7 @@ class SubmissionRepositoryTests extends AbstractPostgresTest {
 	void testCompleteWhenResultProvidedShouldStoreExecutionMetadata() {
 		var user = userRepository.save(new User("user@example.com", "user", "hash"));
 		var task = taskRepository.save(createTask("stream-map-users"));
-		var submission = submissionRepository.save(new Submission(user, task, "return users.stream();"));
+		var submission = submissionRepository.save(new Submission(user, task, "class Solution { public String mapValues(String input) { return input; } }"));
 
 		submission.markRunning();
 		submission.complete(SubmissionStatus.ACCEPTED, "{\"testsPassed\":3,\"testsTotal\":3}", 125);
@@ -105,10 +105,13 @@ class SubmissionRepositoryTests extends AbstractPostgresTest {
 				"Filter active users",
 				slug,
 				"Use Stream API to filter active users.",
+				"mapValues",
+				"String",
+				"String input",
 				TaskDifficulty.EASY,
 				TaskTopic.STREAM_API,
 				TaskStatus.PUBLISHED,
-				"return users.stream();",
-				"return users.stream().filter(User::active).toList();");
+				"class Solution { public String mapValues(String input) { return input; } }",
+				"class Solution { public String mapValues(String input) { return input.trim(); } }");
 	}
 }

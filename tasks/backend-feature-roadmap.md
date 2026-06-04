@@ -26,6 +26,7 @@ Legend:
 | feature/admin-submissions | [x] | Implemented in feature/admin-submissions |
 | feature/docker-sandbox-hardening | [x] | Implemented in feature/docker-sandbox-hardening |
 | feature/entity-long-ids | [x] | Converted entity identifiers from UUID to Long |
+| feature/solution-class-submissions | [x] | Added LeetCode-style Solution class submissions |
 
 ---
 
@@ -381,6 +382,37 @@ Dependencies:
 
 ---
 
+## 12. feature/solution-class-submissions
+
+Status: [x] Completed
+
+Goal:
+
+Use LeetCode-style Java submissions where users edit a `class Solution` with a task-specific method signature.
+
+Delivered:
+
+- added task method metadata: `methodName`, `methodReturnType`, and `methodParameters`
+- exposed method metadata in admin and public task DTOs
+- updated Java runner wrapper to compile submitted `class Solution` source
+- runner now invokes the configured task method with Java argument expressions from test case input
+- normalized primitive, object, and array return values before comparing with expected output
+- added Liquibase migration `09-add-task-method-signature.xml`
+- migrated existing task code fragments into `class Solution { public String solve(String input) ... }`
+- updated runner, controller, repository, and API tests
+
+Notes:
+
+- frontend should render starter code as a full non-public `class Solution`
+- test case `input` now represents the Java argument expression used in the method call, for example `123, 456` for `totalWaviness(int num1, int num2)`
+- expected output remains a string representation of the method result
+
+Dependencies:
+
+- feature/entity-long-ids
+
+---
+
 ## Recommended Order
 
 1. feature/auth [x]
@@ -394,3 +426,4 @@ Dependencies:
 9. feature/admin-submissions [x]
 10. feature/docker-sandbox-hardening [x]
 11. feature/entity-long-ids [x]
+12. feature/solution-class-submissions [x]
