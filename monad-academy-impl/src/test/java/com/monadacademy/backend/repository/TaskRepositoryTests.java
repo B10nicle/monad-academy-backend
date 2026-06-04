@@ -71,10 +71,13 @@ class TaskRepositoryTests extends AbstractPostgresTest {
 				"Filter active users",
 				slug,
 				"Use Stream API to filter active users.",
+				"mapValues",
+				"String",
+				"String input",
 				TaskDifficulty.EASY,
 				TaskTopic.STREAM_API,
 				TaskStatus.DRAFT,
-				"return users.stream();",
-				"return users.stream().filter(User::active).toList();");
+				"class Solution { public String mapValues(String input) { return input; } }",
+				"class Solution { public String mapValues(String input) { return input.trim(); } }");
 	}
 }

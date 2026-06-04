@@ -22,20 +22,35 @@ class JavaWrapperGeneratorTests {
 	@Test
 	void testGenerateWhenRequestProvidedShouldWrapSourceAndEscapedTestCases() {
 		var source = generator.generate(new JavaCodeRunRequest(
-				"return input.toUpperCase();",
-				List.of(new JavaCodeRunnerTestCase("a\"b", "A\"B"))));
+				"""
+						class Solution {
+						    public String upper(String input) {
+						        return input.toUpperCase();
+						    }
+						}
+						""",
+				"upper",
+				List.of(new JavaCodeRunnerTestCase("\"a\\\"b\"", "A\"B"))));
 
 		assertThat(source).contains("public class Main");
-		assertThat(source).contains("public String solve(String input) throws Exception");
+		assertThat(source).contains("class Solution");
+		assertThat(source).contains("solution.upper(\"a\\\"b\")");
 		assertThat(source).contains("return input.toUpperCase();");
-		assertThat(source).contains("new TestCase(\"a\\\"b\", \"A\\\"B\")");
+		assertThat(source).contains("var expected0 = \"A\\\"B\"");
 	}
 
 	@Test
 	void testGenerateWhenValidSourceProvidedShouldCompileWrapper() throws Exception {
 		var source = generator.generate(new JavaCodeRunRequest(
-				"return input.toUpperCase();",
-				List.of(new JavaCodeRunnerTestCase("abc", "ABC"))));
+				"""
+						class Solution {
+						    public String upper(String input) {
+						        return input.toUpperCase();
+						    }
+						}
+						""",
+				"upper",
+				List.of(new JavaCodeRunnerTestCase("\"abc\"", "ABC"))));
 		var workDirectory = Files.createTempDirectory("wrapper-generator-test-");
 		var sourceFile = workDirectory.resolve("Main.java");
 		try {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="09-add-task-method-signature" author="monad-academy-agent">
+		<addColumn schemaName="monad_academy" tableName="tasks">
+			<column name="method_name" type="varchar(64)" defaultValue="solve">
+				<constraints nullable="false"/>
+			</column>
+			<column name="method_return_type" type="varchar(128)" defaultValue="String">
+				<constraints nullable="false"/>
+			</column>
+			<column name="method_parameters" type="varchar(500)" defaultValue="String input">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+
+		<sql splitStatements="false"><![CDATA[
+			update monad_academy.tasks
+			set initial_code = 'class Solution {' || chr(10)
+					|| '    public String solve(String input) throws Exception {' || chr(10)
+					|| initial_code || chr(10)
+					|| '    }' || chr(10)
+					|| '}',
+				solution_template = 'class Solution {' || chr(10)
+					|| '    public String solve(String input) throws Exception {' || chr(10)
+					|| solution_template || chr(10)
+					|| '    }' || chr(10)
+					|| '}'
+			where initial_code not like 'class Solution%';
+		]]></sql>
+
+		<dropDefaultValue schemaName="monad_academy" tableName="tasks" columnName="method_name"/>
+		<dropDefaultValue schemaName="monad_academy" tableName="tasks" columnName="method_return_type"/>
+		<dropDefaultValue schemaName="monad_academy" tableName="tasks" columnName="method_parameters"/>
+	</changeSet>
+</databaseChangeLog>

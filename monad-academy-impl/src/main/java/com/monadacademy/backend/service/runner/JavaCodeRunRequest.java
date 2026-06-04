@@ -9,5 +9,6 @@ import java.util.List;
  */
 public record JavaCodeRunRequest(
 		String sourceCode,
+		String methodName,
 		List<JavaCodeRunnerTestCase> testCases) {
 }

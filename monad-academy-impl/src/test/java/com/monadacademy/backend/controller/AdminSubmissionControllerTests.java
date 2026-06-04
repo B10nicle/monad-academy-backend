@@ -167,10 +167,13 @@ class AdminSubmissionControllerTests extends AbstractPostgresTest {
 				"Map values",
 				slug,
 				"Use Stream API to map values.",
+				"mapValues",
+				"String",
+				"String input",
 				TaskDifficulty.EASY,
 				TaskTopic.STREAM_API,
 				TaskStatus.PUBLISHED,
-				"return values.stream();",
-				"return values.stream().map(String::toUpperCase).toList();");
+				"class Solution { public String mapValues(String input) { return input; } }",
+				"class Solution { public String mapValues(String input) { return input.toUpperCase(); } }");
 	}
 }

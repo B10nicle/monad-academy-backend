@@ -77,6 +77,9 @@ class AdminTaskControllerTests extends AbstractPostgresTest {
 						.content(taskRequest("stream-filter-active-users", "DRAFT")))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.slug").value("stream-filter-active-users"))
+				.andExpect(jsonPath("$.methodName").value("mapValues"))
+				.andExpect(jsonPath("$.methodReturnType").value("String"))
+				.andExpect(jsonPath("$.methodParameters").value("String input"))
 				.andExpect(jsonPath("$.status").value("DRAFT"))
 				.andExpect(jsonPath("$.testCases[0].input").value("[true,false]"));
 
@@ -179,11 +182,14 @@ class AdminTaskControllerTests extends AbstractPostgresTest {
 				"Filter active users",
 				slug,
 				"Use Stream API to filter active users.",
+				"mapValues",
+				"String",
+				"String input",
 				TaskDifficulty.EASY,
 				TaskTopic.STREAM_API,
 				TaskStatus.DRAFT,
-				"return users.stream();",
-				"return users.stream().filter(User::active).toList();");
+				"class Solution { public String mapValues(String input) { return input; } }",
+				"class Solution { public String mapValues(String input) { return input.trim(); } }");
 	}
 
 	private String taskRequest(String slug, String status) {
@@ -192,11 +198,14 @@ class AdminTaskControllerTests extends AbstractPostgresTest {
 				  "title": "Filter active users",
 				  "slug": "%s",
 				  "description": "Use Stream API to filter active users.",
+				  "methodName": "mapValues",
+				  "methodReturnType": "String",
+				  "methodParameters": "String input",
 				  "difficulty": "EASY",
 				  "topic": "STREAM_API",
 				  "status": "%s",
-				  "initialCode": "return users.stream();",
-				  "solutionTemplate": "return users.stream().filter(User::active).toList();",
+				  "initialCode": "class Solution { public String mapValues(String input) { return input; } }",
+				  "solutionTemplate": "class Solution { public String mapValues(String input) { return input.trim(); } }",
 				  "testCases": [
 				    {
 				      "input": "[true,false]",

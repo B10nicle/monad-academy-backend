@@ -87,7 +87,10 @@ class PublicTaskControllerTests extends AbstractPostgresTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.slug").value("published-task"))
 				.andExpect(jsonPath("$.description").value("Use Stream API to transform values."))
-				.andExpect(jsonPath("$.initialCode").value("return values.stream();"))
+				.andExpect(jsonPath("$.methodName").value("mapValues"))
+				.andExpect(jsonPath("$.methodReturnType").value("String"))
+				.andExpect(jsonPath("$.methodParameters").value("String input"))
+				.andExpect(jsonPath("$.initialCode").value("class Solution { public String mapValues(String input) { return input; } }"))
 				.andExpect(jsonPath("$.solutionTemplate").doesNotExist())
 				.andExpect(jsonPath("$.status").doesNotExist())
 				.andExpect(jsonPath("$.testCases.length()").value(1))
@@ -111,10 +114,13 @@ class PublicTaskControllerTests extends AbstractPostgresTest {
 				"Transform values",
 				slug,
 				"Use Stream API to transform values.",
+				"mapValues",
+				"String",
+				"String input",
 				TaskDifficulty.EASY,
 				TaskTopic.STREAM_API,
 				status,
-				"return values.stream();",
-				"return values.stream().map(value -> value * 2).toList();");
+				"class Solution { public String mapValues(String input) { return input; } }",
+				"class Solution { public String mapValues(String input) { return input.toUpperCase(); } }");
 	}
 }
