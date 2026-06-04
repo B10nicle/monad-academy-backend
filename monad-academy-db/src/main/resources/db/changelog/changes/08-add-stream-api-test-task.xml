@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="08-add-stream-api-test-task" author="monad-academy-agent">
+        <sql>
+            INSERT INTO monad_academy.tasks (
+                id,
+                title,
+                slug,
+                description,
+                difficulty,
+                topic,
+                status,
+                initial_code,
+                solution_template,
+                created_at,
+                updated_at
+            )
+            VALUES (
+                       gen_random_uuid(),
+                       'Stream API: Filter developers by salary',
+                       'stream-api-filter-developers-by-salary',
+                       'Input contains comma-separated employees in format name:department:salary.
+       Return developer names with salary greater than 6000 sorted alphabetically.
+       Use Java Stream API.
+
+       Example:
+       input "Zoe:Dev:7000,Adam:Dev:8000,John:QA:9000"
+       should return "Adam,Zoe".',
+                       'EASY',
+                       'STREAM_API',
+                       'PUBLISHED',
+                       'return java.util.Arrays.stream(input.split(","))
+               .map(String::trim)
+               .collect(java.util.stream.Collectors.joining(","));',
+                       'return java.util.Arrays.stream(input.split(","))
+               .map(String::trim)
+               .map(value -> value.split(":"))
+               .filter(parts -> "Dev".equals(parts[1]))
+               .filter(parts -> Integer.parseInt(parts[2]) > 6000)
+               .map(parts -> parts[0])
+               .sorted()
+               .collect(java.util.stream.Collectors.joining(","));',
+                       now(),
+                       now()
+                   );
+
+            INSERT INTO monad_academy.task_test_cases (
+                id,
+                task_id,
+                input,
+                expected_output,
+                hidden,
+                order_index,
+                created_at
+            )
+            VALUES (
+                       gen_random_uuid(),
+                       (
+                           SELECT id
+                           FROM monad_academy.tasks
+                           WHERE slug = 'stream-api-filter-developers-by-salary'
+                       ),
+                       'Zoe:Dev:7000,Adam:Dev:8000,John:QA:9000',
+                       'Adam,Zoe',
+                       false,
+                       1,
+                       now()
+                   );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
