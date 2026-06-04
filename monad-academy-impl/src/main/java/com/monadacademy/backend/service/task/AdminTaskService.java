@@ -40,17 +40,19 @@ public class AdminTaskService {
 	private final AuditLogService auditLogService;
 	private final CurrentUserProvider currentUserProvider;
 	private final TaskTestCaseRepository testCaseRepository;
+	private final TaskMethodSignatureResolver signatureResolver;
 
 	@Transactional
 	public TaskResponse createTask(TaskRequest request) {
 		validateUniqueSlug(request.slug(), null);
+		var signature = resolveSignature(request);
 		var task = taskRepository.save(new Task(
 				request.title(),
 				request.slug(),
 				request.description(),
-				request.methodName(),
-				request.methodReturnType(),
-				request.methodParameters(),
+				signature.methodName(),
+				signature.methodReturnType(),
+				signature.methodParameters(),
 				request.difficulty(),
 				request.topic(),
 				request.status(),
@@ -69,13 +71,14 @@ public class AdminTaskService {
 	public TaskResponse updateTask(Long id, TaskRequest request) {
 		var task = findTask(id);
 		validateUniqueSlug(request.slug(), task.getId());
+		var signature = resolveSignature(request);
 		task.update(
 				request.title(),
 				request.slug(),
 				request.description(),
-				request.methodName(),
-				request.methodReturnType(),
-				request.methodParameters(),
+				signature.methodName(),
+				signature.methodReturnType(),
+				signature.methodParameters(),
 				request.difficulty(),
 				request.topic(),
 				request.status(),
@@ -125,6 +128,34 @@ public class AdminTaskService {
 				request.expectedOutput(),
 				request.hidden(),
 				request.orderIndex());
+	}
+
+	private TaskMethodSignature resolveSignature(TaskRequest request) {
+		var initialSignature = signatureResolver.resolve(request.initialCode());
+		var solutionSignature = signatureResolver.resolve(request.solutionTemplate());
+		initialSignature.ifPresent(signature -> solutionSignature.ifPresent(solution -> validateSignatureMatchesSource(solution, signature)));
+		var parsedSignature = initialSignature
+				.or(() -> solutionSignature)
+				.orElseThrow(() -> new AppException(ErrorCode.VALIDATION_ERROR, HttpStatus.BAD_REQUEST));
+		var methodName = explicitOrParsed(request.methodName(), parsedSignature.methodName());
+		var methodReturnType = explicitOrParsed(request.methodReturnType(), parsedSignature.methodReturnType());
+		var methodParameters = explicitOrParsed(request.methodParameters(), parsedSignature.methodParameters());
+		var signature = new TaskMethodSignature(methodName, methodReturnType, methodParameters);
+		validateSignatureMatchesSource(signature, parsedSignature);
+		return signature;
+	}
+
+	private String explicitOrParsed(String explicitValue, String parsedValue) {
+		if (explicitValue == null || explicitValue.isBlank()) {
+			return parsedValue;
+		}
+		return explicitValue.trim();
+	}
+
+	private void validateSignatureMatchesSource(TaskMethodSignature signature, TaskMethodSignature parsedSignature) {
+		if (!signature.equals(parsedSignature)) {
+			throw new AppException(ErrorCode.VALIDATION_ERROR, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	private User currentUser() {

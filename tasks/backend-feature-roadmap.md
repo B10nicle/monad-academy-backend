@@ -28,6 +28,7 @@ Legend:
 | feature/entity-long-ids | [x] | Converted entity identifiers from UUID to Long |
 | feature/solution-class-submissions | [x] | Added LeetCode-style Solution class submissions |
 | feature/frontend-response-formatting | [x] | Formatted frontend-facing timestamps and durations |
+| feature/admin-task-create-fields | [x] | Derived task method metadata during admin task authoring |
 
 ---
 
@@ -440,6 +441,32 @@ Dependencies:
 
 ---
 
+## 14. feature/admin-task-create-fields
+
+Status: [x] Completed
+
+Goal:
+
+Keep admin task creation compatible with Solution-class task authoring fields.
+
+Delivered:
+
+- made explicit task method metadata optional in admin task create/update requests
+- derived `methodName`, `methodReturnType`, and `methodParameters` from `class Solution` source when omitted
+- validated that explicit metadata matches the parsed Solution method signature
+- added controller and resolver tests for method metadata derivation
+
+Notes:
+
+- this keeps existing frontend admin forms compatible while preserving the backend method metadata required by submissions
+- invalid Solution source without a resolvable method returns `VALIDATION_ERROR`
+
+Dependencies:
+
+- feature/frontend-response-formatting
+
+---
+
 ## Recommended Order
 
 1. feature/auth [x]
@@ -455,3 +482,4 @@ Dependencies:
 11. feature/entity-long-ids [x]
 12. feature/solution-class-submissions [x]
 13. feature/frontend-response-formatting [x]
+14. feature/admin-task-create-fields [x]
