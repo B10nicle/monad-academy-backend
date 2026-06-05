@@ -112,6 +112,7 @@ Important decisions:
 - Coding submissions use a LeetCode-style `class Solution` contract. Tasks define `methodName`, `methodReturnType`, and `methodParameters`; runner test case inputs are Java argument expressions passed to that method.
 - Frontend-facing timestamps are formatted as `HH:mm:ss yyyy-MM-dd`; submission durations are rounded to two significant digits before being returned by response DTOs.
 - Admin task create/update may omit explicit method metadata when the metadata can be derived from the submitted `class Solution` source code.
+- Task method source may include `throws ...` declarations, but task metadata stores only method name, return type, and parameters; checked exception handling is provided by the backend wrapper.
 
 ---
 

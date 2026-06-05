@@ -14,4 +14,5 @@
 	<include file="db/changelog/changes/07-create-user-task-progress.xml"/>
 	<include file="db/changelog/changes/08-convert-entity-ids-to-long.xml"/>
 	<include file="db/changelog/changes/09-add-task-method-signature.xml"/>
+	<include file="db/changelog/changes/10-update-developers-by-salary-signature.xml"/>
 </databaseChangeLog>

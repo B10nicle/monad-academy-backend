@@ -29,6 +29,7 @@ Legend:
 | feature/solution-class-submissions | [x] | Added LeetCode-style Solution class submissions |
 | feature/frontend-response-formatting | [x] | Formatted frontend-facing timestamps and durations |
 | feature/admin-task-create-fields | [x] | Derived task method metadata during admin task authoring |
+| feature/developers-by-salary-signature | [x] | Updated developers-by-salary to array input and descriptive method name |
 
 ---
 
@@ -467,6 +468,33 @@ Dependencies:
 
 ---
 
+## 15. feature/developers-by-salary-signature
+
+Status: [x] Completed
+
+Goal:
+
+Update `developers-by-salary` to use a clearer Solution method contract.
+
+Delivered:
+
+- renamed task method from `solve` to `developerNamesBySalary`
+- changed task method input from `String input` to `String[] developers`
+- removed `throws Exception` from task starter and solution templates
+- updated task test case input to a Java `String[]` expression
+- allowed backend task signature parsing to ignore optional `throws ...` declarations
+
+Notes:
+
+- the Java runner wrapper already declares `main` with `throws Exception`, so task methods do not need to expose checked exceptions in starter code
+- migration `10-update-developers-by-salary-signature.xml` updates existing local task data when the slug is present
+
+Dependencies:
+
+- feature/admin-task-create-fields
+
+---
+
 ## Recommended Order
 
 1. feature/auth [x]
@@ -483,3 +511,4 @@ Dependencies:
 12. feature/solution-class-submissions [x]
 13. feature/frontend-response-formatting [x]
 14. feature/admin-task-create-fields [x]
+15. feature/developers-by-salary-signature [x]
