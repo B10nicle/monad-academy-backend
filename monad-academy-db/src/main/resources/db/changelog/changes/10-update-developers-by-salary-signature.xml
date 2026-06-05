@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="10-update-developers-by-salary-signature" author="monad-academy-agent">
+		<sql><![CDATA[
+			update monad_academy.tasks
+			set method_name = 'developerNamesBySalary',
+				method_return_type = 'String',
+				method_parameters = 'String[] developers',
+				initial_code = 'class Solution {
+    public String developerNamesBySalary(String[] developers) {
+
+    }
+}',
+				solution_template = 'class Solution {
+    public String developerNamesBySalary(String[] developers) {
+        return java.util.Arrays.stream(developers)
+               .map(value -> value.split(":"))
+               .filter(parts -> "Dev".equals(parts[1]))
+               .filter(parts -> Integer.parseInt(parts[2]) > 6000)
+               .map(parts -> parts[0])
+               .sorted()
+               .collect(java.util.stream.Collectors.joining(","));
+    }
+}'
+			where slug = 'developers-by-salary';
+
+			update monad_academy.task_test_cases
+			set input = 'new String[]{"Zoe:Dev:7000", "Adam:Dev:8000", "John:QA:9000"}',
+				expected_output = 'Adam,Zoe'
+			where task_id = (
+				select id
+				from monad_academy.tasks
+				where slug = 'developers-by-salary'
+			);
+		]]></sql>
+	</changeSet>
+</databaseChangeLog>

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class TaskMethodSignatureResolver {
 
 	private static final Pattern SOLUTION_METHOD_PATTERN = Pattern.compile(
-			"(?s)(?:public|protected|private)?\\s*(?:static\\s+)?([\\w.$<>?,\\[\\]\\s]+?)\\s+([A-Za-z_$][A-Za-z0-9_$]*)\\s*\\(([^)]*)\\)\\s*\\{");
+			"(?s)(?:public|protected|private)?\\s*(?:static\\s+)?([\\w.$<>?,\\[\\]\\s]+?)\\s+([A-Za-z_$][A-Za-z0-9_$]*)\\s*\\(([^)]*)\\)\\s*(?:throws\\s+[\\w.$,\\s]+)?\\{");
 
 	public Optional<TaskMethodSignature> resolve(String sourceCode) {
 		if (sourceCode == null || sourceCode.isBlank()) {

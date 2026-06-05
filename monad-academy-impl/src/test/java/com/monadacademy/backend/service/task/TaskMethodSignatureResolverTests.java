@@ -27,6 +27,22 @@ class TaskMethodSignatureResolverTests {
 	}
 
 	@Test
+	void testResolveShouldIgnoreThrowsDeclaration() {
+		var signature = resolver.resolve("""
+				class Solution {
+				    public String developerNamesBySalary(String[] developers) throws Exception {
+				        return "";
+				    }
+				}
+				""");
+
+		assertThat(signature).hasValue(new TaskMethodSignature(
+				"developerNamesBySalary",
+				"String",
+				"String[] developers"));
+	}
+
+	@Test
 	void testResolveShouldReturnEmptyWhenSolutionMethodIsMissing() {
 		assertThat(resolver.resolve("class Solution {}")).isEmpty();
 	}

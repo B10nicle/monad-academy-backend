@@ -66,6 +66,41 @@ class JavaWrapperGeneratorTests {
 		}
 	}
 
+	@Test
+	void testGenerateWhenArrayInputProvidedShouldCompileWrapper() throws Exception {
+		var source = generator.generate(new JavaCodeRunRequest(
+				"""
+						class Solution {
+						    public String developerNamesBySalary(String[] developers) {
+						        return java.util.Arrays.stream(developers)
+						                .map(value -> value.split(":"))
+						                .filter(parts -> "Dev".equals(parts[1]))
+						                .filter(parts -> Integer.parseInt(parts[2]) > 6000)
+						                .map(parts -> parts[0])
+						                .sorted()
+						                .collect(java.util.stream.Collectors.joining(","));
+						    }
+						}
+						""",
+				"developerNamesBySalary",
+				List.of(new JavaCodeRunnerTestCase(
+						"new String[]{\"Zoe:Dev:7000\", \"Adam:Dev:8000\", \"John:QA:9000\"}",
+						"Adam,Zoe"))));
+		var workDirectory = Files.createTempDirectory("wrapper-generator-test-");
+		var sourceFile = workDirectory.resolve("Main.java");
+		try {
+			Files.writeString(sourceFile, source);
+
+			var compiler = ToolProvider.getSystemJavaCompiler();
+			var exitCode = compiler.run(null, null, null, sourceFile.toString());
+
+			assertThat(exitCode).isZero();
+		}
+		finally {
+			delete(workDirectory);
+		}
+	}
+
 	private void delete(Path workDirectory) throws Exception {
 		try (var paths = Files.walk(workDirectory)) {
 			for (var path : paths.sorted((first, second) -> second.compareTo(first)).toList()) {
