@@ -30,6 +30,7 @@ Legend:
 | feature/frontend-response-formatting | [x] | Formatted frontend-facing timestamps and durations |
 | feature/admin-task-create-fields | [x] | Derived task method metadata during admin task authoring |
 | feature/developers-by-salary-signature | [x] | Updated developers-by-salary to array input and descriptive method name |
+| feature/localization-api-contract | [x] | Added stable success response codes for frontend localization |
 
 ---
 
@@ -495,6 +496,34 @@ Dependencies:
 
 ---
 
+## 16. feature/localization-api-contract
+
+Status: [x] Completed
+
+Goal:
+
+Prepare backend API responses for EN/RU frontend localization without moving UI translations into backend.
+
+Delivered:
+
+- audited API DTOs, exception handling, enum responses, and system message responses for frontend-facing strings
+- kept error responses on the existing stable `ErrorResponse.code` contract
+- added `MessageResponse.code` with stable success codes for auth message responses
+- preserved `MessageResponse.message` as an English fallback/backward-compatible field
+- updated authentication controller tests to assert success response codes
+
+Notes:
+
+- frontend should translate by `ErrorResponse.code` and `MessageResponse.code`, not by backend English fallback messages
+- task titles, descriptions, examples, test case values, and submission execution metadata remain domain/content data owned by backend/admin content, not UI labels
+- no database migration is required
+
+Dependencies:
+
+- feature/developers-by-salary-signature
+
+---
+
 ## Recommended Order
 
 1. feature/auth [x]
@@ -512,3 +541,4 @@ Dependencies:
 13. feature/frontend-response-formatting [x]
 14. feature/admin-task-create-fields [x]
 15. feature/developers-by-salary-signature [x]
+16. feature/localization-api-contract [x]
