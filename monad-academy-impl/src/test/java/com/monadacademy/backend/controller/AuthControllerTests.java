@@ -84,6 +84,7 @@ class AuthControllerTests extends AbstractPostgresTest {
 								}
 								"""))
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value("REGISTRATION_COMPLETED"))
 				.andExpect(jsonPath("$.message").value("Registration completed. Check your email to verify your account"));
 
 		var user = userRepository.findByEmailIgnoreCase("user@example.com").orElseThrow();
@@ -138,6 +139,7 @@ class AuthControllerTests extends AbstractPostgresTest {
 								}
 								""".formatted(token)))
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value("EMAIL_VERIFIED"))
 				.andExpect(jsonPath("$.message").value("Email verified"));
 
 		var activatedUser = userRepository.findById(user.getId()).orElseThrow();
@@ -172,6 +174,7 @@ class AuthControllerTests extends AbstractPostgresTest {
 								}
 								"""))
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value("VERIFICATION_INSTRUCTIONS_SENT"))
 				.andExpect(jsonPath("$.message").value("If the email exists, verification instructions have been sent"));
 	}
 
@@ -186,6 +189,7 @@ class AuthControllerTests extends AbstractPostgresTest {
 								}
 								"""))
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value("VERIFICATION_INSTRUCTIONS_SENT"))
 				.andExpect(jsonPath("$.message").value("If the email exists, verification instructions have been sent"));
 	}
 

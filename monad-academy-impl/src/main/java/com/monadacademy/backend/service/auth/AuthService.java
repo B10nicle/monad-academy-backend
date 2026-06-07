@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.monadacademy.backend.config.AppProperties;
 import com.monadacademy.backend.dto.AuthResponse;
 import com.monadacademy.backend.dto.LoginRequest;
+import com.monadacademy.backend.dto.MessageCode;
 import com.monadacademy.backend.dto.MessageResponse;
 import com.monadacademy.backend.dto.RegisterRequest;
 import com.monadacademy.backend.dto.ResendVerificationRequest;
@@ -69,14 +70,14 @@ public class AuthService {
 		emailSender.sendVerificationEmail(user.getEmail(), verificationLink(token));
 		auditLogService.log(user, AuditEventType.USER_REGISTERED, null);
 		log.debug("Registered userId={} username={}", user.getId(), user.getUsername());
-		return new MessageResponse(REGISTRATION_MESSAGE);
+		return new MessageResponse(MessageCode.REGISTRATION_COMPLETED, REGISTRATION_MESSAGE);
 	}
 
 	@Transactional
 	public MessageResponse verifyEmail(VerifyEmailRequest request) {
 		var user = tokenService.verify(request.token());
 		log.debug("Email verification completed for userId={}", user.getId());
-		return new MessageResponse(EMAIL_VERIFIED_MESSAGE);
+		return new MessageResponse(MessageCode.EMAIL_VERIFIED, EMAIL_VERIFIED_MESSAGE);
 	}
 
 	@Transactional
@@ -90,7 +91,7 @@ public class AuthService {
 					auditLogService.log(user, AuditEventType.USER_VERIFICATION_EMAIL_RESENT, null);
 					log.debug("Resent verification email for userId={}", user.getId());
 				});
-		return new MessageResponse(VERIFICATION_SENT_MESSAGE);
+		return new MessageResponse(MessageCode.VERIFICATION_INSTRUCTIONS_SENT, VERIFICATION_SENT_MESSAGE);
 	}
 
 	@Transactional
